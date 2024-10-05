@@ -9,41 +9,82 @@ const attendanceService = require("../services/attendance-service");
 class UserController {
   createUser = async (req, res, next) => {
     const file = req.file;
-    let { name, email, password, type, address, mobile } = req.body;
+
+    // Destructure and retrieve all required fields from req.body
+    let {
+      name,
+      dob,
+      gender,
+      joiningDate,
+      empID,
+      email,
+      password,
+      type,
+      address,
+      mobile,
+      accountNumber, // Added account number
+      bankName, // Added bank name
+      IFSC, // Added IFSC code
+    } = req.body;
+
+    // Generate a unique username
     const username = "user" + crypto.randomInt(11111111, 999999999);
+
+    // Validate required fields
     if (
       !name ||
+      !dob ||
+      !gender ||
+      !joiningDate ||
+      !empID ||
       !email ||
-      !username ||
       !password ||
       !type ||
       !address ||
       !file ||
-      !mobile
-    )
-      return next(ErrorHandler.badRequest("All Fields Required"));
+      !mobile ||
+      !accountNumber || // Validate account number
+      !bankName || // Validate bank name
+      !IFSC // Validate IFSC code
+    ) {
+      return next(ErrorHandler.badRequest("All fields are required"));
+    }
+
+    // Normalize user type to lowercase
     type = type.toLowerCase();
+
+    // Validate admin password for admin user type
     if (type === "admin") {
       const adminPassword = req.body.adminPassword;
-      if (!adminPassword)
+      if (!adminPassword) {
         return next(
           ErrorHandler.badRequest(
-            `Please Enter Your Password to Add ${name} as an Admin`
+            `Please enter your password to add ${name} as an Admin`
           )
         );
+      }
+
+      // Verify admin password
       const { _id } = req.user;
       const { password: hashPassword } = await userService.findUser({ _id });
       const isPasswordValid = await userService.verifyPassword(
         adminPassword,
         hashPassword
       );
-      if (!isPasswordValid)
+      if (!isPasswordValid) {
         return next(
           ErrorHandler.unAuthorized("You have entered a wrong password")
         );
+      }
     }
+
+    // Create user object to store in the database
     const user = {
       name,
+      dob,
+      gender,
+      joiningDate,
+      empID,
       email,
       username,
       mobile,
@@ -51,22 +92,26 @@ class UserController {
       type,
       address,
       image: file.filename,
+      accountNumber, // Add account number to the user object
+      bankName, // Add bank name to the user object
+      IFSC, // Add IFSC code to the user object
     };
 
-    // console.log("Hello! I am here in create user");
-    // console.log(user)
-
+    // Create user in the database
     const userResp = await userService.createUser(user);
 
-    if (!userResp)
-      return next(ErrorHandler.serverError("Failed To Create An Account"));
+    // Handle user creation failure
+    if (!userResp) {
+      return next(ErrorHandler.serverError("Failed to create an account"));
+    }
+
+    // Respond with success message and created user data
     res.json({
       success: true,
-      message: "User has been Added",
-      user: new UserDto(user),
+      message: "User has been added",
+      user: new UserDto(userResp), // Pass the created user data to UserDto
     });
   };
-
   updateUser = async (req, res, next) => {
     const file = req.file;
     const filename = file && file.filename;

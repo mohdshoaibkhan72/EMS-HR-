@@ -1,212 +1,448 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
 import HeaderSection from "../../components/HeaderSection";
-import { addUser } from "../../http";
-import Modal from '../../components/modal/Modal';
+import { addUser } from "../../http"; // Make sure this function handles the API request correctly
+import Modal from "../../components/modal/Modal";
 
-const AddUser = () =>
-{
-    const [imagePreview, setImagePreview] = useState('/assets/icons/user.png');
-    const initialState = {name:'',email:'',mobile:'',password:'',type:'Employee',address:'',profile:'',adminPassword:''}
-    const [formData,setFormData] = useState(initialState);
-    const [showModal,setShowModal] = useState(false);
+const AddUser = () => {
+  const [imagePreview, setImagePreview] = useState("/assets/icons/user.png");
+  const initialState = {
+    empID: "", // Add empID here
+    name: "",
+    email: "",
+    mobile: "",
+    password: "",
+    type: "Employee",
+    address: "",
+    profile: "",
+    accountNumber: "",
+    bankName: "",
+    IFSC: "",
+    adminPassword: "",
+    dob: "", // Date of Birth
+    joiningDate: "", // Joining Date
+    gender: "", // Gender
+  };
+  const [formData, setFormData] = useState(initialState);
+  const [showModal, setShowModal] = useState(false);
 
-    const inputEvent = (e) =>
-    {
-        const {name,value} = e.target;
-        setFormData((old)=>
-        {
-            return{
-                ...old,
-                [name]:value
-            }
+  const inputEvent = (e) => {
+    const { name, value } = e.target;
+    setFormData((old) => ({
+      ...old,
+      [name]: value,
+    }));
+  };
 
-        })
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    const {
+      empID, // Include empID in the destructured formData
+      name,
+      email,
+      mobile,
+      password,
+      type,
+      address,
+      profile,
+      accountNumber,
+      bankName,
+      IFSC,
+      dob,
+      joiningDate,
+      gender,
+    } = formData;
+
+    // Validate required fields
+    if (
+      !empID || // Check for empID
+      !name ||
+      !email ||
+      !mobile ||
+      !password ||
+      !type ||
+      !address ||
+      !accountNumber ||
+      !bankName ||
+      !IFSC ||
+      !dob ||
+      !joiningDate ||
+      !gender
+    ) {
+      return toast.error("All fields are required");
+    }
+    if (!profile) {
+      return toast.error("Please choose an image");
+    }
+    if (type === "Admin" && !showModal) {
+      setShowModal(true);
+      return;
     }
 
-    const onSubmit = async (e) =>
-    {
-        e.preventDefault();
-        const {name,email,mobile,password,type,address,profile} = formData;
-        if(!name || !email || !mobile || !password || !type || !address) return toast.error('All Field Required');
-        if(!profile) return toast.error('Please choose an image');
-        if(type==='Admin' && !showModal) {setShowModal(true); return};
-        const fd = new FormData();
-        Object.keys(formData).map((key)=>
-        {
-            return fd.append(key,formData[key]);
-        })
-        console.log(fd);
-        const {success,message} = await addUser(fd);
-        if(success)
-        {
-            toast.success(message)
-            setShowModal(false);
-            setFormData({...initialState});
-            setImagePreview('/assets/icons/user.png');
-        }
+    const fd = new FormData();
+    Object.keys(formData).forEach((key) => {
+      fd.append(key, formData[key]);
+    });
+
+    const { success, message } = await addUser(fd);
+    if (success) {
+      toast.success(message);
+      setShowModal(false);
+      setFormData({ ...initialState });
+      setImagePreview("/assets/icons/user.png");
+    } else {
+      toast.error(message || "Failed to add user");
     }
+  };
 
-    const captureImage = (e) =>
-    {
-        const file = e.target.files[0];
-        setFormData((old)=>
-        {
-            return{
-                ...old,
-                profile:file
-            }
+  const captureImage = (e) => {
+    const file = e.target.files[0];
+    setFormData((old) => ({
+      ...old,
+      profile: file,
+    }));
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      setImagePreview(reader.result);
+    };
+  };
 
-        })
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onloadend = () =>
-        {
-            setImagePreview(reader.result);
-        }
-    }
+  const modalAction = () => setShowModal((prev) => !prev);
 
-    const modalAction = () => setShowModal(showModal? false : true);
+  const inputGroupStyle = {
+    marginBottom: "15px",
+  };
 
-    return(
-        <>
+  const buttonStyle = {
+    width: "200px",
+  };
 
-        {
-            showModal && 
-            <Modal close={modalAction} title="Add Admin" width='35%'>
-                <div className="row"  style={{margin:'20px'}}>
-                    <div className="col col-md-4">
-                        <div className="input-group justify-content-center text-center">
-                            <img className='rounded' src={imagePreview} width='120' alt="" /> 
-                        </div>
-                    </div>
-                    <div className="col col-md-8">
-                        <table className='table table-md'>
-                            <tr>
-                                <th>Name</th>
-                                <td>{formData.name}</td>
-                            </tr> 
-                            <tr>
-                                <th>Email</th>
-                                <td>{formData.email}</td>
-                            </tr>
-                            <tr>
-                                <th>User Type</th>
-                                <td>{formData.type}</td>
-                            </tr>
-                        </table>
-                    </div>
+  return (
+    <>
+      {showModal && (
+        <Modal close={modalAction} title="Add Admin" width="35%">
+          <div className="row" style={{ margin: "20px" }}>
+            <div className="col col-md-4">
+              <div className="input-group justify-content-center text-center">
+                <img
+                  className="rounded"
+                  src={imagePreview}
+                  width="120"
+                  alt=""
+                />
+              </div>
+            </div>
+            <div className="col col-md-8">
+              <table className="table table-md">
+                <tbody>
+                  <tr>
+                    <th>Name</th>
+                    <td>{formData.name}</td>
+                  </tr>
+                  <tr>
+                    <th>Email</th>
+                    <td>{formData.email}</td>
+                  </tr>
+                  <tr>
+                    <th>User Type</th>
+                    <td>{formData.type}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div className="form-group col-md-12">
+            <label>Enter Your Password</label>
+            <div className="input-group">
+              <div className="input-group-prepend">
+                <div className="input-group-text">
+                  <i className="fas fa-lock"></i>
                 </div>
-                <div className="form-group col-md-12">
-                    <label>Enter Your Password</label>
-                    <div className="input-group">
-                        <div className="input-group-prepend">
-                        <div className="input-group-text">
-                            <i className="fas fa-lock"></i>
-                        </div>
-                        </div>
-                        <input onChange={inputEvent} value={formData.adminPassword} type="password" placeholder={`Enter Your Password To Add ${formData.name} As An Admin`} id='adminPassword' name='adminPassword' className="form-control"/>
-                    </div>
-                </div>
-                <div className="justify-content-center text-center mb-3">
-                    <button className='btn btn-primary btn-lg' type='submit' form='addUserForm' style={{width:'30vh'}}>Add {formData.type}</button>
-                </div>
-            </Modal>
-        }
+              </div>
+              <input
+                onChange={inputEvent}
+                value={formData.adminPassword}
+                type="password"
+                placeholder={`Enter Your Password To Add ${formData.name} As An Admin`}
+                id="adminPassword"
+                name="adminPassword"
+                className="form-control"
+              />
+            </div>
+          </div>
+          <div className="justify-content-center text-center mb-3">
+            <button
+              className="btn btn-primary btn-lg"
+              type="submit"
+              form="addUserForm"
+              style={{ width: "30vh" }}
+            >
+              Add {formData.type}
+            </button>
+          </div>
+        </Modal>
+      )}
 
-        <div className="main-content">
+      <div className="main-content">
         <section className="section">
-            <HeaderSection title='Add User'/>
-                <div className="card">
-                  <div className="card-body pr-5 pl-5 m-1">
-                    <form className='row' onSubmit={onSubmit} id='addUserForm'>
-                        <div className="form-group col-md-12 text-center">
-                            <div className="input-group justify-content-center">
-                                <input type="file" id='profile' name='profile' className="form-control d-none" onChange={captureImage} accept="image/*" />
-                                <label htmlFor='profile'> <img className='rounded' src={imagePreview} width='120' alt="" /> </label>
-                            </div>
-                        </div>
-
-                        <div className="form-group col-md-6">
-                            <label>Enter Name</label>
-                            <div className="input-group">
-                                <div className="input-group-prepend">
-                                <div className="input-group-text">
-                                    <i className="fas fa-user"></i>
-                                </div>
-                                </div>
-                                <input onChange={inputEvent} value={formData.name} type="text" id='name' name='name' className="form-control"/>
-                            </div>
-                        </div>
-
-                        <div className="form-group col-md-6">
-                            <label>Enter Email</label>
-                            <div className="input-group">
-                                <div className="input-group-prepend">
-                                <div className="input-group-text">
-                                    <i className="fas fa-envelope"></i>
-                                </div>
-                                </div>
-                                <input onChange={inputEvent} value={formData.email} type="email" id='email' name='email' className="form-control"/>
-                            </div>
-                        </div>
-
-                        <div className="form-group col-md-4">
-                            <label>Enter Mobile Number</label>
-                            <div className="input-group">
-                                <div className="input-group-prepend">
-                                <div className="input-group-text">
-                                    <i className="fas fa-phone"></i>
-                                </div>
-                                </div>
-                                <input onChange={inputEvent} value={formData.mobile} type="number" id='mobile' name='mobile' className="form-control"/>
-                            </div>
-                        </div>
-
-                        <div className="form-group col-md-4">
-                            <label>Enter Password</label>
-                            <div className="input-group">
-                                <div className="input-group-prepend">
-                                <div className="input-group-text">
-                                    <i className="fas fa-lock"></i>
-                                </div>
-                                </div>
-                                <input onChange={inputEvent} value={formData.password} type="password" id='password' name='password' className="form-control"/>
-                            </div>
-                        </div>
-
-                        <div className="form-group col-md-4">
-                            <label>User Type</label>
-                            <select name='type' onChange={inputEvent} value={formData.type} className="form-control select2">
-                                <option>Employee</option>
-                                <option>Leader</option>
-                                <option>Admin</option>
-                            </select>
-                        </div>
-
-                        <div className="form-group col-md-12 ">
-                            <label>Enter Address</label>
-                            <div className="input-group">
-                                <div className="input-group-prepend">
-                                <div className="input-group-text">
-                                    <i className="fas fa-map-marker-alt"></i>
-                                </div>
-                                </div>
-                                <input onChange={inputEvent} value={formData.address} type="text" id='address' name='address' className="form-control"/>
-                            </div>
-                        </div>
-
-                        <div className="form-group text-center col-md-12">
-                            <button className='btn btn-primary btn-lg' type='submit' style={{width:'30vh'}}>Add {formData.type}</button>
-                        </div>
-
-                    </form>
+          <HeaderSection title="Add User" />
+          <div className="card">
+            <div className="card-body pr-5 pl-5 m-1">
+              <form className="row" onSubmit={onSubmit} id="addUserForm">
+                <div className="form-group col-md-12 text-center">
+                  <div className="input-group justify-content-center">
+                    <input
+                      type="file"
+                      id="profile"
+                      name="profile"
+                      className="form-control d-none"
+                      onChange={captureImage}
+                      accept="image/*"
+                    />
+                    <label htmlFor="profile">
+                      <img
+                        className="rounded"
+                        src={imagePreview}
+                        width="120"
+                        alt=""
+                      />
+                    </label>
                   </div>
                 </div>
+
+                <div className="form-group col-md-6" style={inputGroupStyle}>
+                  <label>Employee ID</label> {/* Add input for empID */}
+                  <div className="input-group">
+                    <div className="input-group-prepend">
+                      <div className="input-group-text">
+                        <i className="fas fa-id-card"></i>
+                      </div>
+                    </div>
+                    <input
+                      onChange={inputEvent}
+                      value={formData.empID}
+                      type="text"
+                      id="empID"
+                      name="empID"
+                      className="form-control"
+                    />
+                  </div>
+                </div>
+
+                <div className="form-group col-md-6" style={inputGroupStyle}>
+                  <label>Enter Name</label>
+                  <div className="input-group">
+                    <div className="input-group-prepend">
+                      <div className="input-group-text">
+                        <i className="fas fa-user"></i>
+                      </div>
+                    </div>
+                    <input
+                      onChange={inputEvent}
+                      value={formData.name}
+                      type="text"
+                      id="name"
+                      name="name"
+                      className="form-control"
+                    />
+                  </div>
+                </div>
+
+                <div className="form-group col-md-6" style={inputGroupStyle}>
+                  <label>Enter Email</label>
+                  <div className="input-group">
+                    <div className="input-group-prepend">
+                      <div className="input-group-text">
+                        <i className="fas fa-envelope"></i>
+                      </div>
+                    </div>
+                    <input
+                      onChange={inputEvent}
+                      value={formData.email}
+                      type="email"
+                      id="email"
+                      name="email"
+                      className="form-control"
+                    />
+                  </div>
+                </div>
+
+                <div className="form-group col-md-4" style={inputGroupStyle}>
+                  <label>Enter Mobile Number</label>
+                  <div className="input-group">
+                    <div className="input-group-prepend">
+                      <div className="input-group-text">
+                        <i className="fas fa-phone"></i>
+                      </div>
+                    </div>
+                    <input
+                      onChange={inputEvent}
+                      value={formData.mobile}
+                      type="number"
+                      id="mobile"
+                      name="mobile"
+                      className="form-control"
+                    />
+                  </div>
+                </div>
+
+                <div className="form-group col-md-4" style={inputGroupStyle}>
+                  <label>Enter Password</label>
+                  <div className="input-group">
+                    <div className="input-group-prepend">
+                      <div className="input-group-text">
+                        <i className="fas fa-lock"></i>
+                      </div>
+                    </div>
+                    <input
+                      onChange={inputEvent}
+                      value={formData.password}
+                      type="password"
+                      id="password"
+                      name="password"
+                      className="form-control"
+                    />
+                  </div>
+                </div>
+
+                <div className="form-group col-md-4" style={inputGroupStyle}>
+                  <label>User Type</label>
+                  <div className="input-group">
+                    <select
+                      name="type"
+                      value={formData.type}
+                      onChange={inputEvent}
+                      className="form-control"
+                    >
+                      <option value="Employee">Employee</option>
+                      <option value="Admin">Admin</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="form-group col-md-12" style={inputGroupStyle}>
+                  <label>Address</label>
+                  <div className="input-group">
+                    <textarea
+                      onChange={inputEvent}
+                      value={formData.address}
+                      id="address"
+                      name="address"
+                      className="form-control"
+                      rows="3"
+                    />
+                  </div>
+                </div>
+
+                <div className="form-group col-md-4" style={inputGroupStyle}>
+                  <label>Account Number</label>
+                  <div className="input-group">
+                    <div className="input-group-prepend">
+                      <div className="input-group-text">
+                        <i className="fas fa-money-bill"></i>
+                      </div>
+                    </div>
+                    <input
+                      onChange={inputEvent}
+                      value={formData.accountNumber}
+                      type="text"
+                      id="accountNumber"
+                      name="accountNumber"
+                      className="form-control"
+                    />
+                  </div>
+                </div>
+
+                <div className="form-group col-md-4" style={inputGroupStyle}>
+                  <label>Bank Name</label>
+                  <div className="input-group">
+                    <input
+                      onChange={inputEvent}
+                      value={formData.bankName}
+                      type="text"
+                      id="bankName"
+                      name="bankName"
+                      className="form-control"
+                    />
+                  </div>
+                </div>
+
+                <div className="form-group col-md-4" style={inputGroupStyle}>
+                  <label>IFSC Code</label>
+                  <div className="input-group">
+                    <input
+                      onChange={inputEvent}
+                      value={formData.IFSC}
+                      type="text"
+                      id="IFSC"
+                      name="IFSC"
+                      className="form-control"
+                    />
+                  </div>
+                </div>
+
+                <div className="form-group col-md-4" style={inputGroupStyle}>
+                  <label>Date of Birth</label>
+                  <div className="input-group">
+                    <input
+                      onChange={inputEvent}
+                      value={formData.dob}
+                      type="date"
+                      id="dob"
+                      name="dob"
+                      className="form-control"
+                    />
+                  </div>
+                </div>
+
+                <div className="form-group col-md-4" style={inputGroupStyle}>
+                  <label>Joining Date</label>
+                  <div className="input-group">
+                    <input
+                      onChange={inputEvent}
+                      value={formData.joiningDate}
+                      type="date"
+                      id="joiningDate"
+                      name="joiningDate"
+                      className="form-control"
+                    />
+                  </div>
+                </div>
+
+                <div className="form-group col-md-4" style={inputGroupStyle}>
+                  <label>Gender</label>
+                  <div className="input-group">
+                    <select
+                      name="gender"
+                      value={formData.gender}
+                      onChange={inputEvent}
+                      className="form-control"
+                    >
+                      <option value="">Select</option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="col-md-12 text-center">
+                  <button
+                    type="submit"
+                    className="btn btn-primary"
+                    style={buttonStyle}
+                  >
+                    Add User
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
         </section>
       </div>
-      </>
-    )
-}
+    </>
+  );
+};
 
 export default AddUser;
