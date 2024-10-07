@@ -133,6 +133,7 @@ const AddUser = () => {
                 />
               </div>
             </div>
+
             <div className="col col-md-8">
               <table className="table table-md">
                 <tbody>
@@ -189,6 +190,7 @@ const AddUser = () => {
           <HeaderSection title="Add User" />
           <div className="card">
             <div className="card-body pr-5 pl-5 m-1">
+              <h4>Basic Details</h4>
               <form className="row" onSubmit={onSubmit} id="addUserForm">
                 <div className="form-group col-md-12 text-center">
                   <div className="input-group justify-content-center">
@@ -208,25 +210,6 @@ const AddUser = () => {
                         alt=""
                       />
                     </label>
-                  </div>
-                </div>
-
-                <div className="form-group col-md-6" style={inputGroupStyle}>
-                  <label>Employee ID</label> {/* Add input for empID */}
-                  <div className="input-group">
-                    <div className="input-group-prepend">
-                      <div className="input-group-text">
-                        <i className="fas fa-id-card"></i>
-                      </div>
-                    </div>
-                    <input
-                      onChange={inputEvent}
-                      value={formData.empID}
-                      type="text"
-                      id="empID"
-                      name="empID"
-                      className="form-control"
-                    />
                   </div>
                 </div>
 
@@ -286,7 +269,64 @@ const AddUser = () => {
                     />
                   </div>
                 </div>
+                <div className="form-group col-md-4" style={inputGroupStyle}>
+                  <label>Gender</label>
+                  <select
+                    id="gender"
+                    name="gender"
+                    value={formData.gender}
+                    onChange={inputEvent}
+                    className="form-control"
+                  >
+                    <option value="">Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+                <div className="form-group col-md-4" style={inputGroupStyle}>
+                  <label>Date of Birth</label>
+                  <input
+                    onChange={inputEvent}
+                    value={formData.dob}
+                    type="date"
+                    id="dob"
+                    name="dob"
+                    className="form-control"
+                  />
+                </div>
 
+                <div className="form-group col-md-12" style={inputGroupStyle}>
+                  <label>Address</label>
+                  <textarea
+                    onChange={inputEvent}
+                    value={formData.address}
+                    id="address"
+                    name="address"
+                    className="form-control"
+                    rows="3"
+                  />
+                </div>
+                <h4>office details</h4>
+
+                <div className="form-group col-md-6" style={inputGroupStyle}>
+                  <label>Employee ID</label>
+                  <div className="input-group">
+                    <div className="input-group-prepend">
+                      <div className="input-group-text">
+                        <i className="fas fa-id-card"></i>
+                      </div>
+                    </div>
+                    <input
+                      onChange={inputEvent}
+                      value={formData.empID}
+                      type="text"
+                      id="empID"
+                      name="empID"
+                      className="form-control"
+                    />
+                  </div>
+                </div>
                 <div className="form-group col-md-4" style={inputGroupStyle}>
                   <label>Enter Password</label>
                   <div className="input-group">
@@ -308,39 +348,38 @@ const AddUser = () => {
 
                 <div className="form-group col-md-4" style={inputGroupStyle}>
                   <label>User Type</label>
-                  <div className="input-group">
-                    <select
-                      name="type"
-                      value={formData.type}
-                      onChange={inputEvent}
-                      className="form-control"
-                    >
-                      <option value="Employee">Employee</option>
-                      <option value="Admin">Admin</option>
-                    </select>
-                  </div>
-                </div>
+                  <select
+                    id="type"
+                    name="type"
+                    value={formData.type}
+                    onChange={inputEvent}
+                    className="form-control"
+                  >
+                    <option value="">SelectUser</option>
+                    <option value="Employee">Employee</option>
 
-                <div className="form-group col-md-12" style={inputGroupStyle}>
-                  <label>Address</label>
-                  <div className="input-group">
-                    <textarea
-                      onChange={inputEvent}
-                      value={formData.address}
-                      id="address"
-                      name="address"
-                      className="form-control"
-                      rows="3"
-                    />
-                  </div>
+                    <option value="Admin">Admin</option>
+                    <option value="leader">leader</option>
+                  </select>
                 </div>
-
                 <div className="form-group col-md-4" style={inputGroupStyle}>
+                  <label>Joining Date</label>
+                  <input
+                    onChange={inputEvent}
+                    value={formData.joiningDate}
+                    type="date"
+                    id="joiningDate"
+                    name="joiningDate"
+                    className="form-control"
+                  />
+                </div>
+                <h4>basic details</h4>
+                <div className="form-group col-md-6" style={inputGroupStyle}>
                   <label>Account Number</label>
                   <div className="input-group">
                     <div className="input-group-prepend">
                       <div className="input-group-text">
-                        <i className="fas fa-money-bill"></i>
+                        <i className="fas fa-university"></i>
                       </div>
                     </div>
                     <input
@@ -354,9 +393,14 @@ const AddUser = () => {
                   </div>
                 </div>
 
-                <div className="form-group col-md-4" style={inputGroupStyle}>
+                <div className="form-group col-md-6" style={inputGroupStyle}>
                   <label>Bank Name</label>
                   <div className="input-group">
+                    <div className="input-group-prepend">
+                      <div className="input-group-text">
+                        <i className="fas fa-university"></i>
+                      </div>
+                    </div>
                     <input
                       onChange={inputEvent}
                       value={formData.bankName}
@@ -368,9 +412,14 @@ const AddUser = () => {
                   </div>
                 </div>
 
-                <div className="form-group col-md-4" style={inputGroupStyle}>
+                <div className="form-group col-md-6" style={inputGroupStyle}>
                   <label>IFSC Code</label>
                   <div className="input-group">
+                    <div className="input-group-prepend">
+                      <div className="input-group-text">
+                        <i className="fas fa-university"></i>
+                      </div>
+                    </div>
                     <input
                       onChange={inputEvent}
                       value={formData.IFSC}
@@ -382,55 +431,10 @@ const AddUser = () => {
                   </div>
                 </div>
 
-                <div className="form-group col-md-4" style={inputGroupStyle}>
-                  <label>Date of Birth</label>
-                  <div className="input-group">
-                    <input
-                      onChange={inputEvent}
-                      value={formData.dob}
-                      type="date"
-                      id="dob"
-                      name="dob"
-                      className="form-control"
-                    />
-                  </div>
-                </div>
-
-                <div className="form-group col-md-4" style={inputGroupStyle}>
-                  <label>Joining Date</label>
-                  <div className="input-group">
-                    <input
-                      onChange={inputEvent}
-                      value={formData.joiningDate}
-                      type="date"
-                      id="joiningDate"
-                      name="joiningDate"
-                      className="form-control"
-                    />
-                  </div>
-                </div>
-
-                <div className="form-group col-md-4" style={inputGroupStyle}>
-                  <label>Gender</label>
-                  <div className="input-group">
-                    <select
-                      name="gender"
-                      value={formData.gender}
-                      onChange={inputEvent}
-                      className="form-control"
-                    >
-                      <option value="">Select</option>
-                      <option value="Male">Male</option>
-                      <option value="Female">Female</option>
-                      <option value="Other">Other</option>
-                    </select>
-                  </div>
-                </div>
-
                 <div className="col-md-12 text-center">
                   <button
+                    className="btn btn-success"
                     type="submit"
-                    className="btn btn-primary"
                     style={buttonStyle}
                   >
                     Add User

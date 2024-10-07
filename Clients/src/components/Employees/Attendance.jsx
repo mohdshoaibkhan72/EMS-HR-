@@ -1,178 +1,102 @@
 import React, { useEffect, useState } from "react";
+import Calendar from "react-calendar";
+import "react-calendar/dist/Calendar.css"; // Keep this for default calendar styling
 import { viewEmployeeAttendance } from "../../http";
 import { useSelector } from "react-redux";
 import Loading from "../Loading";
 
-const Attendance = () => {
+const AttendanceCalendar = () => {
   const { user } = useSelector((state) => state.authSlice);
-  const [selectedYear, setSelectedYear] = useState("");
-  const [selectedMonth, setSelectedMonth] = useState("");
-  const [selectedDay, setSelectedDay] = useState("");
-  const [attendance, setAttendance] = useState();
+  const [attendance, setAttendance] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(new Date());
 
-  const years = [2020, 2021, 2022, 2023, 2024]; // Customize this as needed
-  const months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
-  const monthDays = {
-    January: 31,
-    February: 28,
-    March: 31,
-    April: 30,
-    May: 31,
-    June: 30,
-    July: 31,
-    August: 31,
-    September: 30,
-    October: 31,
-    November: 30,
-    December: 31,
-  };
-  const numOfDays = monthDays[selectedMonth];
-  const days = Array.from({ length: numOfDays }, (_, index) => index + 1);
-
+  // Fetch attendance data for the user when the component mounts
   useEffect(() => {
-    const dt = new Date();
-    const obj = {
-      employeeID: user.id,
-      year: dt.getFullYear(),
-      month: dt.getMonth() + 1,
+    const fetchAttendance = async () => {
+      try {
+        const dt = new Date();
+        const obj = {
+          employeeID: user.id,
+          year: dt.getFullYear(),
+          month: dt.getMonth() + 1,
+        };
+        const res = await viewEmployeeAttendance(obj);
+        setAttendance(res.data);
+      } catch (error) {
+        console.error("Failed to fetch attendance data", error);
+      }
     };
-    const fetchData = async () => {
-      const res = await viewEmployeeAttendance(obj);
-      const { data } = res;
-      setAttendance(data);
-    };
-    fetchData();
+    fetchAttendance();
   }, [user.id]);
 
-  const searchAttendance = async () => {
-    const obj = {
-      employeeID: user.id,
-    };
-    if (selectedYear) {
-      obj["year"] = selectedYear;
-    }
-    if (selectedMonth) {
-      obj["month"] = months.findIndex((month) => month === selectedMonth) + 1;
-    }
-    if (selectedDay) {
-      obj["date"] = selectedDay;
+  // Get attendance status for a specific date
+  const getAttendanceStatus = (date) => {
+    if (!attendance) return null;
+
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+
+    const record = attendance.find(
+      (entry) =>
+        entry.date === day && entry.month === month && entry.year === year
+    );
+
+    if (record) {
+      if (record.present === true) return "Present";
+      if (record.halfDay === true) return "Half-day";
+      if (record.leave === true) return "Leave";
+      return "Absent"; // Default to Absent if none match
     }
 
-    const res = await viewEmployeeAttendance(obj);
-    const { data } = res;
-    setAttendance(data);
+    return null;
   };
 
   return (
-    <>
+    <div className="main-content">
       {attendance ? (
-        <div className="main-content">
-          <section className="section">
-            <div className="card">
-              <div className="card-header d-flex justify-content-between">
-                <h4>Attendance</h4>
-              </div>
-            </div>
-
-            <div className="d-flex justify-content-center w-100">
-              <div className="col">
-                <select
-                  className="form-control select2"
-                  value={selectedYear}
-                  onChange={(e) => setSelectedYear(e.target.value)}
-                >
-                  <option value="">Year</option>
-                  {years.map((year) => (
-                    <option key={year} value={year}>
-                      {year}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="col">
-                <select
-                  className="form-control select2"
-                  value={selectedMonth}
-                  onChange={(e) => setSelectedMonth(e.target.value)}
-                >
-                  <option value="">Month</option>
-                  {months.map((month) => (
-                    <option key={month} value={month}>
-                      {month}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="col">
-                <select
-                  className="form-control select2"
-                  value={selectedDay}
-                  onChange={(e) => setSelectedDay(e.target.value)}
-                >
-                  <option value="">Day</option>
-                  {days.map((day) => (
-                    <option key={day} value={day}>
-                      {day}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <button
-                onClick={searchAttendance}
-                className="btn btn-lg btn-primary col"
-              >
-                Search
-              </button>
-            </div>
-          </section>
-          <div className="table-responsive">
-            <table className="table table-striped table-md center-text">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Date</th>
-                  <th>Day</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {attendance?.map((attendance, idx) => (
-                  <tr key={idx}>
-                    <td>{idx + 1}</td>
-                    <td>
-                      {attendance.date +
-                        "/" +
-                        attendance.month +
-                        "/" +
-                        attendance.year}
-                    </td>
-                    <td>{attendance.day}</td>
-                    <td>{attendance.present === true ? "Present" : ""}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+        <div style={{ margin: "20px auto", maxWidth: "800px" }}>
+          <Calendar
+            value={selectedDate}
+            onChange={setSelectedDate}
+            tileContent={({ date, view }) => {
+              if (view === "month") {
+                const status = getAttendanceStatus(date);
+                return (
+                  <div>
+                    {status && (
+                      <span
+                        style={{
+                          fontSize: "12px",
+                          textAlign: "center",
+                          padding: "5px",
+                          borderRadius: "4px",
+                          color: "white",
+                          backgroundColor:
+                            status === "Present"
+                              ? "green"
+                              : status === "Absent"
+                              ? "red"
+                              : status === "Leave"
+                              ? "blue"
+                              : "orange", // Half-day
+                        }}
+                      >
+                        {status}
+                      </span>
+                    )}
+                  </div>
+                );
+              }
+              return null;
+            }}
+          />
         </div>
       ) : (
         <Loading />
       )}
-    </>
+    </div>
   );
 };
 
-export default Attendance;
+export default AttendanceCalendar;
