@@ -286,7 +286,24 @@ class UserController {
 
   markEmployeeAttendance = async (req, res, next) => {
     try {
-      const { employeeID } = req.body;
+      const { employeeID, attendanceDate, status } = req.body;
+      const validStatuses = ["Present", "Absent", "Leave", "Half Day"];
+
+      // Validate status
+      if (!validStatuses.includes(status)) {
+        return next(ErrorHandler.badRequest("Invalid attendance status"));
+      }
+
+      const d = new Date(attendanceDate);
+      const today = new Date();
+
+      // Ensure the date is not in the future
+      if (d > today) {
+        return next(
+          ErrorHandler.badRequest("Cannot mark attendance for future dates")
+        );
+      }
+
       const days = [
         "Sunday",
         "Monday",
@@ -296,7 +313,6 @@ class UserController {
         "Friday",
         "Saturday",
       ];
-      const d = new Date();
 
       const newAttendance = {
         employeeID,
@@ -304,35 +320,34 @@ class UserController {
         month: d.getMonth() + 1,
         date: d.getDate(),
         day: days[d.getDay()],
-        present: true,
+        status, // Store attendance status (Present, Absent, etc.)
       };
 
+      // Check if attendance has already been marked for this day
       const isAttendanceMarked = await attendanceService.findAttendance(
         newAttendance
       );
-      if (isAttendanceMarked)
+      if (isAttendanceMarked) {
         return next(
           ErrorHandler.notAllowed(
-            d.toLocaleDateString() +
-              " " +
-              days[d.getDay() - 1] +
-              " " +
-              "Attendance Already Marked!"
+            `${d.toLocaleDateString()} ${
+              days[d.getDay()]
+            } Attendance already marked!`
           )
         );
+      }
 
+      // Save the attendance
       const resp = await attendanceService.markAttendance(newAttendance);
-      console.log(resp);
-      if (!resp)
+      if (!resp) {
         return next(ErrorHandler.serverError("Failed to mark attendance"));
+      }
 
-      const msg =
-        d.toLocaleDateString() +
-        " " +
-        days[d.getDay()] +
-        " " +
-        "Attendance Marked!";
+      const msg = `${d.toLocaleDateString()} ${
+        days[d.getDay()]
+      } Attendance marked as ${status}!`;
 
+      // Send the response
       res.json({ success: true, newAttendance, message: msg });
     } catch (error) {
       res.json({ success: false, error });
@@ -342,12 +357,21 @@ class UserController {
   viewEmployeeAttendance = async (req, res, next) => {
     try {
       const data = req.body;
+      console.log("Request Body Data:", data); // Log the incoming request data
+
       const resp = await attendanceService.findAllAttendance(data);
-      if (!resp) return next(ErrorHandler.notFound("No Attendance found"));
+      console.log("Attendance Response:", resp); // Log the response from the service
+
+      if (!resp || resp.length === 0) {
+        return next(ErrorHandler.notFound("No Attendance found"));
+      }
 
       res.json({ success: true, data: resp });
     } catch (error) {
-      res.json({ success: false, error });
+      console.error("Error fetching attendance:", error); // Log the error
+      res
+        .status(500)
+        .json({ success: false, error: error.message || "An error occurred" });
     }
   };
 
