@@ -52,8 +52,8 @@ app.use((req, res, next) => {
 app.use(errorMiddleware);
 
 // Root Route
-app.get("/", (req, res) => {
-  res.send("OK");
+app.get("/shoiab", (req, res) => {
+  res.json("OK");
 });
 
 // Start the Server
