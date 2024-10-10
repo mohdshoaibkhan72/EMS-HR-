@@ -1,0 +1,159 @@
+.login-container {
+  display: flex;
+  height: 90vh;
+  align-items: center;
+  justify-content: center;
+  background-color: #f7f7f7;
+}
+.navbarlogo {
+  padding-top: 10px;
+  padding-left: 50px;
+  background-color: #f7f7f7;
+}
+.navbarlogo img {
+  width: 200px;
+}
+.login-left {
+  margin-left: 100px;
+  flex: 1;
+  max-width: 400px;
+  background-color: white;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.login-right {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.login-right img {
+  width: 400px;
+  height: 400px;
+  object-fit: cover;
+  margin: 10px 0;
+}
+
+.login-brand img {
+  display: block;
+  margin: 0 auto;
+}
+
+.login-card {
+  margin-top: 40px;
+}
+
+.login-card h4 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  color: white;
+  padding: 10px;
+  width: 100%;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.forgot-password {
+  display: block;
+  margin-top: 10px;
+  text-align: right;
+}
+
+.login-footer {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.social-links {
+  margin-top: 10px;
+}
+
+.social-links a {
+  margin-right: 10px;
+}
+/* Right Side: Professional, Employee-focused Design */
+.login-right {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: f7f7f7;
+  height: 90vh;
+  padding: 0 50px;
+  color: #333;
+  text-align: left;
+}
+
+.login-content {
+  max-width: 400px;
+}
+
+.login-content h1 {
+  font-size: 2.5rem;
+  color: #004080; /* Company branding color */
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.login-content p {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.highlight {
+  background-color: #e0f7fa;
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  font-size: 1.1rem;
+  color: #00796b;
+  text-align: center;
+}
+
+/* Call-to-action (optional for features like employee benefits) */
+.cta-btn {
+  background-color: #ff5722;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.cta-btn:hover {
+  background-color: #e64a19;
+}
+
+/* Subtle Fade-in Animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
