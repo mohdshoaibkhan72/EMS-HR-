@@ -78,13 +78,13 @@ const LoginForm = () => {
                   name="password"
                   required
                 />
-                <NavLink to="/forgot" className="forgot-password">
-                  Forgot Password?
-                </NavLink>
               </div>
               <button type="submit" className="btn btn-primary btn-block">
                 Login
               </button>
+              <NavLink to="/forgot" className="forgot-password">
+                Forgot Password?
+              </NavLink>
             </form>
           </div>
           <div className="login-footer">
@@ -104,7 +104,6 @@ const LoginForm = () => {
             </div>
           </div>
         </div>
-
         <div className="login-right">
           <div className="login-content">
             <h1>Welcome Back!</h1>
