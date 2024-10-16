@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -12,7 +13,7 @@ const ErrorHandler = require("./utils/error-handler");
 const { auth, authRole } = require("./middlewares/auth-middleware");
 
 const PORT = process.env.PORT || 5500;
-const CLIENT_URL = process.env.CLIENT_URL || "http://localhost:3000";
+const { CLIENT_URL } = process.env || "http://localhost:3000 ";
 
 // Fix Mongoose Deprecation Warning
 mongoose.set("strictQuery", false);
