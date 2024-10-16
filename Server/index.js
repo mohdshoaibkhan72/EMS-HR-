@@ -13,7 +13,7 @@ const ErrorHandler = require("./utils/error-handler");
 const { auth, authRole } = require("./middlewares/auth-middleware");
 
 const PORT = process.env.PORT || 5500;
-const { CLIENT_URL } = process.env || "http://localhost:3000 ";
+const { CLIENT_URL } = process.env || "https://ems-hr.vercel.app";
 
 // Fix Mongoose Deprecation Warning
 mongoose.set("strictQuery", false);
@@ -27,7 +27,12 @@ dbConnection();
 // CORS Configuration
 const corsOption = {
   credentials: true,
-  origin: ["http://localhost:3000", "http://1.1.1.111:3000", CLIENT_URL],
+  origin: [
+    "http://localhost:3000",
+    "http://1.1.1.111:3000",
+    "https://ems-hr.vercel.app",
+    CLIENT_URL,
+  ],
 };
 app.use(cors(corsOption));
 
