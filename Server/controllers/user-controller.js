@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const crypto = require("crypto");
 const teamService = require("../services/team-service");
 const attendanceService = require("../services/attendance-service");
+const cloudinary = require("../configs/cloudinary");
 
 class UserController {
   createUser = async (req, res, next) => {
@@ -78,6 +79,9 @@ class UserController {
       }
     }
 
+    // Upload the image to Cloudinary
+    const result = await cloudinary.uploader.upload(req.file.path);
+
     // Create user object to store in the database
     const user = {
       name,
@@ -91,7 +95,7 @@ class UserController {
       password,
       type,
       address,
-      image: file.filename,
+      image: result.secure_url, // Store the URL from Cloudinary
       accountNumber, // Add account number to the user object
       bankName, // Add bank name to the user object
       IFSC, // Add IFSC code to the user object
@@ -109,9 +113,10 @@ class UserController {
     res.json({
       success: true,
       message: "User has been added",
-      user: new UserDto(userResp), // Pass the created user data to UserDto
+      user: new UserDto(userResp),
     });
   };
+
   updateUser = async (req, res, next) => {
     const file = req.file;
     const filename = file && file.filename;

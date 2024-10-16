@@ -3,8 +3,6 @@ import { useSelector } from "react-redux";
 
 const DashboardEmployee = () => {
   const { user } = useSelector((state) => state.authSlice);
-  console.log(user);
-
   return (
     <div className="main-content">
       <section className="section">
