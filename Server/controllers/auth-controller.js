@@ -114,6 +114,7 @@ class AuthController {
     const response = await tokenService.removeRefreshToken(_id, refreshToken);
     res.clearCookie("refreshToken");
     res.clearCookie("accessToken");
+    console.log("log-out successfully ");
     return response.modifiedCount === 1
       ? res.json({ success: true, message: "Logout Successfully" })
       : next(ErrorHandler.unAuthorized());
