@@ -2,10 +2,10 @@
   "name": "paisa4you",
   "version": "1.0.0",
   "description": "A system for company to manage their teams, employee and targets",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
-    "dev": "nodemon server.js",
-    "start": "node server.js"
+    "dev": "nodemon index.js",
+    "start": "node index.js"
   },
   "keywords": [],
   "author": "Social Codia",
