@@ -12,6 +12,12 @@
   transition: all 0.3s ease;
 }
 
+.main-sidebar .navbarlogo {
+  width: 250px;
+  height: auto;
+  background-color: #343a40;
+}
+
 /* Hide the scrollbar but allow scrolling */
 .main-sidebar::-webkit-scrollbar {
   display: none; /* For Chrome, Safari, and Opera */
