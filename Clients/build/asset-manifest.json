@@ -1,8 +1,8 @@
 {
   "files": {
-    "main.css": "/static/css/main.3e3c0fda.chunk.css",
-    "main.js": "/static/js/main.d3d4535d.chunk.js",
-    "main.js.map": "/static/js/main.d3d4535d.chunk.js.map",
+    "main.css": "/static/css/main.097461e6.chunk.css",
+    "main.js": "/static/js/main.5651ebeb.chunk.js",
+    "main.js.map": "/static/js/main.5651ebeb.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.d8d8a78d.js",
     "runtime-main.js.map": "/static/js/runtime-main.d8d8a78d.js.map",
     "static/css/2.95dde690.chunk.css": "/static/css/2.95dde690.chunk.css",
@@ -12,7 +12,7 @@
     "static/js/3.fb3345c2.chunk.js.map": "/static/js/3.fb3345c2.chunk.js.map",
     "index.html": "/index.html",
     "static/css/2.95dde690.chunk.css.map": "/static/css/2.95dde690.chunk.css.map",
-    "static/css/main.3e3c0fda.chunk.css.map": "/static/css/main.3e3c0fda.chunk.css.map",
+    "static/css/main.097461e6.chunk.css.map": "/static/css/main.097461e6.chunk.css.map",
     "static/js/2.c948ea6f.chunk.js.LICENSE.txt": "/static/js/2.c948ea6f.chunk.js.LICENSE.txt",
     "static/media/LoginForm.css": "/static/media/Flat_openSpace_offices_07.4e9cb10c.jpg"
   },
@@ -20,7 +20,7 @@
     "static/js/runtime-main.d8d8a78d.js",
     "static/css/2.95dde690.chunk.css",
     "static/js/2.c948ea6f.chunk.js",
-    "static/css/main.3e3c0fda.chunk.css",
-    "static/js/main.d3d4535d.chunk.js"
+    "static/css/main.097461e6.chunk.css",
+    "static/js/main.5651ebeb.chunk.js"
   ]
 }
