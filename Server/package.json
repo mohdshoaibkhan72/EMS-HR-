@@ -4,8 +4,8 @@
   "description": "A system for company to manage their teams, employee and targets",
   "main": "server.js",
   "scripts": {
-    "dev": "npx nodemon server.js",
-    "start": "npm server.js"
+    "dev": "nodemon server.js",
+    "start": "node server.js"
   },
   "keywords": [],
   "author": "Social Codia",
@@ -21,8 +21,10 @@
     "mongoose": "^6.0.12",
     "multer": "^1.4.4-lts.1",
     "nodemailer": "^6.7.0",
-    "nodemon": "^3.0.1",
     "paisa4you": "file:",
     "validator": "^13.7.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
   }
 }
