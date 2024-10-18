@@ -1,0 +1,80 @@
+/* Counts Card Style */
+.counts-card {
+  margin: auto;
+  height: 150px; /* Fixed height for consistency */
+  background: #1a1a2e; /* Background color */
+  border-radius: 10px; /* Rounded corners */
+  color: white; /* Text color */
+  padding: 10px; /* Padding inside the card */
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2); /* Shadow effect */
+  transition: transform 0.3s ease; /* Smooth transition */
+  text-align: center; /* Center text */
+  flex: 1 1 22%; /* Responsive width for cards */
+  min-width: 180px; /* Minimum width for smaller screens */
+  margin: 15px;
+
+  /* Unique animated gradient border */
+  position: relative;
+  border: 3px solid transparent; /* Transparent border for layering effect */
+  background-image: linear-gradient(#1a1a2e, #1a1a2e),
+    linear-gradient(135deg, #6a11cb, #2575fc, #ff0099);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  animation: borderAnimation 3s infinite; /* Add animation */
+}
+
+/* Keyframes for border animation */
+@keyframes borderAnimation {
+  0% {
+    background-image: linear-gradient(#1a1a2e, #1a1a2e),
+      linear-gradient(135deg, #6a11cb, #2575fc, #ff0099);
+  }
+  50% {
+    background-image: linear-gradient(#1a1a2e, #1a1a2e),
+      linear-gradient(135deg, #ff0099, #6a11cb, #2575fc);
+  }
+  100% {
+    background-image: linear-gradient(#1a1a2e, #1a1a2e),
+      linear-gradient(135deg, #6a11cb, #2575fc, #ff0099);
+  }
+}
+
+/* Card Hover Effect */
+.counts-card:hover {
+  transform: translateY(-3px); /* Lift the card slightly when hovered */
+}
+
+/* Card Icon */
+.card-icon {
+  margin-bottom: 1px;
+  color: aqua; /* Icon color */
+}
+
+.card-icon i {
+  height: 100px;
+  color: aqua; /* Icon color */
+}
+/* Card Title */
+.card-header h2 {
+  font-size: 1.5rem; /* Font size for title */
+  margin: 0; /* Remove default margin */
+}
+
+/* Card Count */
+.card-body.count {
+  font-size: 1.5rem; /* Font size for count */
+  font-weight: bold; /* Bold text */
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .counts-card {
+    flex: 1 1 45%; /* Adjust width for medium screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .counts-card {
+    flex: 1 1 100%; /* Full width for small screens */
+  }
+}

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
+import "./Employee.css"; // Import the CSS file for custom styles
 
 const Employee = () => {
   const { user, loading } = useSelector((state) => state.authSlice);
@@ -13,20 +14,18 @@ const Employee = () => {
     return <div>Error loading user details.</div>;
   }
 
-  console.log("user details are ", user);
-
   return (
-    <div className="container mt-5">
+    <div className="employee-container">
       <section className="section">
         {/* Welcome Card */}
         <div className="card mb-4">
           <div className="card-header d-flex justify-content-between">
-            <h4>Welcome {user?.name}</h4>
+            <h4>Welcome, {user?.name}</h4>
           </div>
         </div>
 
         {/* Button Group for Sections */}
-        <div className="btn-group mb-4" role="group" aria-label="Basic details">
+        <div className="btn-group mb-2" role="group" aria-label="Basic details">
           <button
             type="button"
             className={`btn ${
@@ -61,7 +60,7 @@ const Employee = () => {
           <div className="card-body row">
             <div className="col-md-3">
               <img
-                className="img-fluid img-thumbnail"
+                className="profile-img"
                 src={user.image}
                 alt={`${user.name}'s profile`}
               />

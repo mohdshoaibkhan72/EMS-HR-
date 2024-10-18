@@ -4,6 +4,7 @@ import { useHistory } from "react-router";
 import { NavLink } from "react-router-dom";
 import { dLogout } from "../http";
 import { setAuth } from "../store/auth-slice";
+import "./navigation.css";
 
 const Navigation = () => {
   const { name, image } = useSelector((state) => state.authSlice.user);
@@ -20,18 +21,15 @@ const Navigation = () => {
     <>
       <div className="navbar-bg"></div>
       <nav className="navbar navbar-expand-lg main-navbar">
+        <div className="navbar-brand">
+          <img
+            src="https://www.paisa4you.com/Images/png%20logo.png"
+            alt="Company Logo"
+            className="logo"
+          />
+        </div>
         <form className="form-inline mr-auto">
           <ul className="navbar-nav mr-3">
-            <li>
-              <NavLink
-                to="/"
-                id="sidebarCollapse"
-                data-toggle="sidebar"
-                className="nav-link nav-link-lg"
-              >
-                <i className="fas fa-bars"></i>
-              </NavLink>
-            </li>
             <li>
               <NavLink
                 to="/"
@@ -42,18 +40,6 @@ const Navigation = () => {
               </NavLink>
             </li>
           </ul>
-          <div className="search-element">
-            <input
-              className="form-control"
-              type="search"
-              placeholder="Search"
-              aria-label="Search"
-              data-width="250"
-            />
-            <button className="btn" type="submit">
-              <i className="fas fa-search"></i>
-            </button>
-          </div>
         </form>
         <ul className="navbar-nav navbar-right">
           <li className="dropdown dropdown-list-toggle">

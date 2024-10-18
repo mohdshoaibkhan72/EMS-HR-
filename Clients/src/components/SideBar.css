@@ -1,91 +1,126 @@
 /* Main Sidebar */
 .main-sidebar {
   width: 250px;
-  background-color: #343a40;
+  background-color: #1a1a2e; /* Default background */
   height: 100vh;
   position: fixed;
   top: 0;
   left: 0;
-  padding-top: 20px;
   overflow-y: auto;
-  overflow-x: hidden; /* Prevent horizontal scrolling */
-  transition: all 0.3s ease;
+  overflow-x: hidden;
+  transition: width 0.3s ease, background-color 0.3s ease; /* Smooth transition for width */
+  z-index: 1000; /* Ensure sidebar is above other content */
+  color: white;
 }
 
-.main-sidebar .navbarlogo {
-  width: 250px;
-  height: auto;
-  background-color: #343a40;
+/* Collapsed Sidebar */
+.main-sidebar.collapsed {
+  width: 80px; /* Reduced width when collapsed */
 }
 
 /* Hide the scrollbar but allow scrolling */
 .main-sidebar::-webkit-scrollbar {
-  display: none; /* For Chrome, Safari, and Opera */
+  display: none; /* Hide scrollbar for webkit browsers */
 }
 
 .main-sidebar {
-  -ms-overflow-style: none; /* For Internet Explorer and Edge */
-  scrollbar-width: none; /* For Firefox */
-}
-
-/* Logo */
-.main-sidebar .navbarlogo {
-  text-align: center;
-  padding: 20px 0;
-}
-
-.main-sidebar .navbarlogo img {
-  width: 80px;
-}
-
-/* Sidebar Brand */
-.sidebar-brand {
-  color: white;
-  font-size: 1.6rem; /* Slightly larger font size */
-  text-align: center;
-  margin-bottom: 1.5rem;
-  font-weight: bold; /* Increase font weight for better readability */
-}
-
-/* Small Brand Link */
-.sidebar-brand-sm a {
-  color: white;
-  text-decoration: none;
-  font-size: 1.3rem;
-  font-weight: 500; /* Increase weight */
+  -ms-overflow-style: none; /* Hide scrollbar for IE and Edge */
+  scrollbar-width: none; /* Hide scrollbar for Firefox */
 }
 
 /* Sidebar Menu */
 .sidebar-menu {
-  padding-left: 0;
   list-style: none;
-  margin-top: 20px;
+  padding-left: 0;
+  margin-top: 10px;
+  height: 100px;
 }
 
-/* Menu Links */
+.sidebar-menu li {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
 .sidebar-menu a {
-  display: block;
-  padding: 12px 20px; /* Increased padding for better spacing */
-  color: white;
-  font-size: 1rem; /* Font size for readability */
-  font-weight: 500; /* Bold text for legibility */
+  display: flex;
+  align-items: center;
+  padding: 12px 20px; /* More padding for better spacing */
+  color: #ffffff; /* Default text color */
+  font-size: 1rem;
+  font-weight: 400;
   text-decoration: none;
-  transition: background 0.3s ease, color 0.3s ease; /* Smooth transition */
+  transition: background-color 0.3s ease, color 0.3s ease,
+    padding-left 0.3s ease;
 }
 
-/* Hover State */
+/* Sidebar Menu Item Hover Effect with Gradient */
 .sidebar-menu a:hover {
-  background-color: #0056b3; /* Darker blue on hover */
-  color: #ffffff; /* Keep text white */
-  font-weight: 600; /* Slightly bolder text on hover */
+  background: linear-gradient(135deg, #6a11cb, #2575fc); /* Gradient on hover */
+  color: white; /* Text color on hover */
+  font-weight: 600;
+  padding-left: 25px; /* Indent when hovering */
 }
 
-/* Button Styling */
+/* Active Link Style (Updated) */
+.sidebar-menu a.active {
+  background-color: transparent; /* Keep the background transparent */
+  color: #2575fc; /* Blue color for active link */
+  font-weight: 600; /* Make the active link bold */
+  padding-left: 20px; /* Adjust padding for the active state */
+  border-left: 4px solid #2575fc; /* Add a blue border on the left to highlight the active link */
+}
+
+/* Remove the white background for the active link when hovered */
+.sidebar-menu a.active:hover {
+  background-color: transparent; /* Ensure the background stays transparent */
+  color: #2575fc; /* Keep the blue color when active link is hovered */
+}
+
+.sidebar-menu i {
+  margin-right: 10px;
+  font-size: 1rem; /* Icon size */
+  transition: font-size 0.3s ease;
+}
+
+/* Collapsed Sidebar Icon */
+.main-sidebar.collapsed .sidebar-menu i {
+  font-size: 1rem; /* Larger icon when sidebar is collapsed */
+  margin-right: 0; /* Remove margin for better centering */
+}
+
+/* Collapsed Sidebar - Hide Text */
+.main-sidebar.collapsed .sidebar-menu a span {
+  display: none; /* Hide text when sidebar is collapsed */
+}
+
+/* Sidebar Expanded - Show Text */
+.main-sidebar.expanded .sidebar-menu a span {
+  display: inline-block; /* Show text when expanded */
+}
+
+/* Hover - Show Text when Sidebar is Collapsed */
+.main-sidebar.collapsed .sidebar-menu a:hover span {
+  position: absolute;
+  left: 100%; /* Place text outside collapsed sidebar */
+  white-space: nowrap;
+  background: linear-gradient(
+    135deg,
+    #6a11cb,
+    #2575fc
+  ); /* Text background gradient */
+  padding: 5px 10px;
+  border-radius: 5px;
+  margin-left: 10px;
+  transition: opacity 0.3s ease;
+}
+
+/* Sidebar Button */
 .btn {
   display: inline-block;
   padding: 12px;
   font-size: 16px;
-  color: #ffffff;
+  color: white;
   text-align: center;
   width: 100%;
   background-color: #007bff;
@@ -93,17 +128,32 @@
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease, color 0.3s ease;
+  margin: 15px 0;
 }
 
 /* Button Hover */
 .btn:hover {
-  background-color: #0056b3;
-  color: #ffffff; /* Keep the button text white */
+  background-color: linear-gradient(
+    135deg,
+    #6a11cb,
+    #2575fc
+  ); /* Gradient on hover */
+  color: #ffffff;
 }
 
-/* Footer */
-.hide-sidebar-mini {
-  margin-top: auto;
-  padding: 20px;
-  text-align: center;
+/* Responsive Sidebar for smaller devices */
+@media (max-width: 768px) {
+  .main-sidebar {
+    width: 100%; /* Full width on smaller screens */
+    height: auto;
+    position: relative; /* Sidebar becomes relative */
+  }
+
+  .main-sidebar.collapsed {
+    width: 100%; /* Full width even when collapsed */
+  }
+
+  .sidebar-menu a {
+    padding: 12px 15px; /* Adjust padding for smaller screens */
+  }
 }

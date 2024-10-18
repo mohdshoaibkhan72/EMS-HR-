@@ -1,0 +1,118 @@
+/* Navbar Background */
+.navbar-bg {
+  background-color: #0f0f1e; /* Dark navbar background */
+  height: 60px;
+}
+
+/* Main Navbar */
+.main-navbar {
+  background-color: #1a1a2e; /* Dark theme for navbar */
+  padding: 15px;
+  display: flex;
+  height: 60px;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 100px; /* Space below the navbar */
+}
+
+/* Notification Dropdown */
+.notification-toggle {
+  position: relative;
+  padding: 15px;
+  color: #ffffff; /* White text color */
+  font-size: 1.2rem; /* Font size for notifications */
+}
+
+.nav-link-lg {
+  padding: 0 15px; /* Padding for large nav links */
+}
+
+.dropdown-list {
+  width: 300px; /* Width of the dropdown */
+}
+
+.dropdown-list .dropdown-item {
+  padding: 15px; /* Padding for dropdown items */
+  display: flex;
+  align-items: center; /* Center items vertically */
+}
+
+.dropdown-item .dropdown-item-icon {
+  margin-right: 10px; /* Space between icon and text */
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 35px; /* Icon width */
+  height: 35px; /* Icon height */
+  border-radius: 50%; /* Round shape for icon */
+}
+
+.dropdown-item .dropdown-item-desc {
+  display: flex;
+  flex-direction: column; /* Stack text vertically */
+}
+
+.dropdown-list .dropdown-item .time {
+  font-size: 0.8rem; /* Smaller font size for time */
+  color: #6c757d; /* Light gray color */
+}
+
+/* Dropdown Footer */
+.dropdown-footer {
+  padding: 10px; /* Padding for footer */
+  background-color: #f8f9fa; /* Light background */
+  text-align: center; /* Center text */
+}
+
+.dropdown-footer a {
+  color: #007bff; /* Blue color for links */
+  text-decoration: none; /* No underline */
+}
+
+/* Profile Dropdown */
+.nav-link-user img {
+  width: 35px; /* Profile image width */
+  height: 35px; /* Profile image height */
+}
+
+.nav-link-user .d-lg-inline-block {
+  margin-left: 10px; /* Space between image and text */
+  color: #ffffff; /* White color for user text */
+}
+
+/* Profile Dropdown Items */
+.dropdown-menu .dropdown-item {
+  display: flex;
+  align-items: center; /* Center items vertically */
+  padding: 10px 20px; /* Padding for dropdown items */
+}
+
+.dropdown-menu .dropdown-item i {
+  margin-right: 10px; /* Space between icon and text */
+  color: #007bff; /* Blue color for icons */
+}
+
+.dropdown-item.text-danger i {
+  color: #dc3545; /* Red color for danger icons */
+}
+
+.dropdown-divider {
+  margin: 10px 0; /* Space above and below divider */
+}
+
+/* Responsive Adjustments */
+@media (max-width: 991px) {
+  .search-element input {
+    width: 150px; /* Width of search input */
+  }
+
+  .navbar-nav .nav-link-lg {
+    padding: 0 10px; /* Adjusted padding for small screens */
+  }
+}
+
+/* Logo Styles */
+.logo {
+  height: 40px; /* Set the height of the logo */
+  margin-right: 20px; /* Space between the logo and navbar items */
+}

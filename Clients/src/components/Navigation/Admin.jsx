@@ -66,11 +66,6 @@ const Admin = () => {
           <i className="fas fa-address-card"></i> <span>Add Team</span>
         </NavLink>
       </li>
-      <li>
-        <NavLink className="nav-link" to="/home">
-          <i className="far fa-square"></i> <span>Blank Page</span>
-        </NavLink>
-      </li>
 
       <li className="menu-header">Settings</li>
       <li>

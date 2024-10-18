@@ -1,23 +1,20 @@
+import React from "react";
+import "./CountsCard.css"; // Ensure to import your CSS
 
-const CountsCard = ({title,icon,count}) =>
-{
-    return (
-        <div className="col-lg-3 col-md-6 col-sm-6 col-12">
-        <div className="card card-statistic-1">
-          <div className="card-icon bg-primary">
-            <i className={`far ${icon}`}></i>
-          </div>
-          <div className="card-wrap">
-            <div className="card-header">
-              <h4>{title}</h4>
-            </div>
-            <div className="card-body">
-              {count}
-            </div>
+const CountsCard = ({ title, icon, count }) => {
+  return (
+    <div className="counts-card">
+      <div className="card-wrap">
+        <div className="card-header">
+          <div className="header-content">
+            <i className={`far ${icon} card-icon`}></i>
+            <h2>{title}</h2>
           </div>
         </div>
+        <div className="card-body count">{count}</div>
       </div>
-    )
-}
+    </div>
+  );
+};
 
 export default CountsCard;
