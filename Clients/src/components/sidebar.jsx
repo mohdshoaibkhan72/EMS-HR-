@@ -30,16 +30,6 @@ const SideBar = () => {
             <Employee />
           )}
         </div>
-        <div className="mt-4 mb-4 p-3 hide-sidebar-mini">
-          <a
-            href="https://mohammad-shoaib-khan.vercel.app/"
-            target="_blank"
-            className="btn btn-primary btn-lg btn-block btn-icon-split"
-            rel="noreferrer"
-          >
-            <i className="fas fa-rocket"></i> Mohammad
-          </a>
-        </div>
       </aside>
     </div>
   );
