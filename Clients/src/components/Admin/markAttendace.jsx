@@ -15,9 +15,9 @@ const MarkAttendance = () => {
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
-        const res = await getEmployees(); // Fetch employees from API
-        console.log("Employees fetched:", res); // Log the fetched employees
-        setEmployees(res.data); // Set employees data
+        const res = await getEmployees();
+        console.log("Employees fetched:", res);
+        setEmployees(res.data);
       } catch (error) {
         console.error(error);
         toast.error("Failed to fetch employees.");
@@ -68,7 +68,7 @@ const MarkAttendance = () => {
       if (success) {
         toast.success(message);
       } else {
-        toast.error("Failed to mark attendance. Please try again.");
+        toast.error("Failed to mark attendance. Please try again. ", error);
       }
     } catch (error) {
       console.error("Error marking attendance:", error); // Log the error
