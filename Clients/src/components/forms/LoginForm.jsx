@@ -13,28 +13,48 @@ const LoginForm = () => {
     password: "",
   });
 
+  // Handle input changes
   const inputEvent = (e) => {
     const { name, value } = e.target;
-    setFormData((old) => {
-      return {
-        ...old,
-        [name]: value,
-      };
-    });
+    setFormData((old) => ({
+      ...old,
+      [name]: value,
+    }));
   };
 
+  // Handle form submission
   const onSubmit = async (e) => {
     e.preventDefault();
     const { email, password } = formData;
-    if (!email || !password) return toast.error("All Fields Required");
-    const res = await doLogin({ email, password });
-    const { success } = res;
-    if (success) dispatch(setAuth(res.user));
+
+    // Check if email and password are provided
+    if (!email || !password) {
+      return toast.error("All Fields Required");
+    }
+
+    try {
+      // Call login function
+      const res = await doLogin({ email, password });
+
+      // Destructure response
+      const { success, message } = res;
+
+      if (success) {
+        // If login successful, dispatch auth and show success toast
+        dispatch(setAuth(res.user));
+        toast.success("Login Successful");
+      } else {
+        // If login failed, show error message from backend
+        toast.error(message || "Login Failed");
+      }
+    } catch (error) {
+      // If there's an error, display a generic error message
+      toast.error("Something went wrong, please try again later.");
+    }
   };
 
   return (
     <>
-      {" "}
       <div className="navbarlogo">
         <img
           src="https://www.paisa4you.com/Images/png%20logo.png"
@@ -98,7 +118,7 @@ const LoginForm = () => {
                 <img
                   style={{ width: "25px" }}
                   src="https://pngimg.com/uploads/letter_s/letter_s_PNG34.png"
-                  alt=""
+                  alt="Developer Logo"
                 />
               </a>
             </div>

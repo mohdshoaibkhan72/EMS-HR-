@@ -10,30 +10,44 @@ const mailService = require("../services/mail-service");
 class AuthController {
   login = async (req, res, next) => {
     const { email, password } = req.body;
-    if (!email || !password) return next(ErrorHandler.badRequest());
+
+    // Check if both email and password are provided
+    if (!email || !password)
+      return next(ErrorHandler.badRequest("Email and password are required"));
+
     let data;
-    if (validator.isEmail(email)) data = { email };
-    else data = { username: email };
+    if (validator.isEmail(email)) {
+      data = { email }; // Search by email
+    } else {
+      data = { username: email }; // Search by username if input is not a valid email
+    }
+
     const user = await userService.findUser(data);
-    if (!user)
+
+    // If no user is found, return error
+    if (!user) {
       return next(ErrorHandler.badRequest("Invalid Email or Username"));
-    const {
-      _id,
-      name,
-      username,
-      email: dbEmail,
-      password: hashPassword,
-      type,
-      status,
-    } = user;
-    if (status != "active")
+    }
+
+    // Check account status
+    if (user.status !== "active") {
       return next(
         ErrorHandler.badRequest(
-          "There is a problem with your account, Please contact to the admin"
+          "There is a problem with your account, please contact the admin"
         )
       );
-    const isValid = await userService.verifyPassword(password, hashPassword);
-    if (!isValid) return next(ErrorHandler.badRequest("Invalid Password"));
+    }
+
+    // Validate password
+    const isValid = await userService.verifyPassword(password, user.password);
+    if (!isValid) {
+      return next(ErrorHandler.badRequest("Invalid Password")); // If password is incorrect, return this error
+    }
+
+    // Destructure necessary user details for token generation
+    const { _id, username, email: dbEmail, type } = user;
+
+    // Generate access and refresh tokens
     const payload = {
       _id,
       email: dbEmail,
@@ -41,27 +55,33 @@ class AuthController {
       type,
     };
     const { accessToken, refreshToken } = tokenService.generateToken(payload);
-    console.log("Access-Token : ", accessToken);
-    console.log("Refresh-Token : ", refreshToken);
+
+    // Store refresh token in the database
     await tokenService.storeRefreshToken(_id, refreshToken);
+
+    // Set cookies for access and refresh tokens
     res.cookie("accessToken", accessToken, {
-      maxAge: 1000 * 60 * 60 * 24 * 30,
+      maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days
       httpOnly: true,
       secure: true,
       sameSite: "None",
     });
     res.cookie("refreshToken", refreshToken, {
-      maxAge: 1000 * 60 * 60 * 24 * 30,
+      maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days
       httpOnly: true,
       secure: true,
       sameSite: "None",
     });
 
+    // Send success response
     res.json({
       success: true,
-      message: "Login Successfull",
-      user: new UserDto(user),
+      message: "Login Successful",
+      user: new UserDto(user), // Pass sanitized user data
     });
+
+    console.log("access tokens: ", accessToken);
+    console.log("refres tokens: ", refreshToken);
   };
 
   forgot = async (req, res, next) => {
