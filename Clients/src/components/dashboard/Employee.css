@@ -1,0 +1,128 @@
+/* Dark background styling */
+body {
+  background-color: #1a1a2e; /* Main background color */
+  color: white; /* Default text color */
+  font-family: Arial, sans-serif;
+}
+
+.employee-dashboard {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.dashboard-section {
+  background-color: #2c2c3e; /* Slightly lighter background for sections */
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  color: white;
+}
+
+/* Profile Card */
+.profile-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #333;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  color: white;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+}
+
+.profile-icon {
+  font-size: 40px;
+  margin-right: 10px;
+  color: white;
+}
+
+h4 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: white;
+}
+
+/* Section Buttons */
+.section-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.section-btn {
+  background-color: #444;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.section-btn:hover {
+  background-color: #555;
+}
+
+.section-btn.active {
+  background-color: #007bff;
+  color: #fff;
+}
+
+/* Details Card */
+.details-card {
+  background-color: #2c2c3e; /* Matches dashboard section background */
+  padding: 20px;
+  border-radius: 10px;
+  color: white;
+}
+
+.details-section {
+  margin-bottom: 20px;
+}
+
+.details-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.details-item {
+  font-size: 1rem;
+  background-color: #333;
+  padding: 10px;
+  border-radius: 5px;
+  color: white;
+  border: 1px solid #444; /* Adds border for better definition */
+}
+
+/* Input Fields */
+input,
+textarea {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #444;
+  background-color: #2c2c3e; /* Input background color matches dashboard */
+  color: white;
+  border-radius: 5px;
+}
+
+input:focus,
+textarea:focus {
+  border-color: #555; /* Slight change on focus */
+  outline: none;
+}
+
+/* Loading/Error Styles */
+.loading,
+.error {
+  text-align: center;
+  font-size: 1.5rem;
+  color: #f1f1f1;
+}

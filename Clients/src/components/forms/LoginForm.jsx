@@ -72,12 +72,13 @@ const LoginForm = () => {
             />
           </div>
           <div className="login-card">
-            <h4>Hello! there</h4>
+            <h4>Welcome Back </h4>
             <form onSubmit={onSubmit} className="login-form">
               <div className="form-group">
                 <label htmlFor="email">Email</label>
                 <input
                   id="email"
+                  placeholder="Enter a email"
                   onChange={inputEvent}
                   value={formData.email}
                   type="email"
@@ -90,6 +91,7 @@ const LoginForm = () => {
               <div className="form-group">
                 <label htmlFor="password">Password</label>
                 <input
+                  placeholder="Enter a password "
                   id="password"
                   onChange={inputEvent}
                   value={formData.password}
@@ -108,8 +110,9 @@ const LoginForm = () => {
             </form>
           </div>
           <div className="login-footer">
-            <span>Developed by Shoaib Khan</span>
             <div className="social-links">
+              {" "}
+              Developed by Shoaib Khan
               <a
                 href="https://mohammad-shoaib-khan.vercel.app/"
                 target="_blank"

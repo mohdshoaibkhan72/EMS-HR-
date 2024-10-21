@@ -8,7 +8,7 @@ const Dashboard = () => {
   const { user } = useSelector((state) => state.authSlice);
   return (
     <div className="main-content">
-      <section className="section">
+      <section className="" style={{ color: "white" }}>
         <HeaderSection title="Dashboard Overview" />
         {user.type === "Admin" ? (
           <Admin />
