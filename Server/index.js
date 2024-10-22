@@ -47,8 +47,6 @@ app.use("/api/admin", auth, authRole(["admin"]), adminRoute);
 app.use("/api/employee", auth, authRole(["employee", "leader"]), employeeRoute);
 app.use("/api/leader", auth, authRole(["leader"]), leaderRoute);
 
-app.use("/storage", express.static("storage"));
-
 // Error Handling
 app.use((req, res, next) => {
   return next(ErrorHandler.notFound("The Requested Resources Not Found"));

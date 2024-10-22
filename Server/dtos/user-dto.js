@@ -34,9 +34,7 @@ class UserDto {
     this.accountNumber = user.accountNumber;
     this.bankName = user.bankName;
     this.IFSC = user.IFSC;
-    this.image = user.image
-      ? `${process.env.BASE_URL}/storage/images/profile/${user.image}`
-      : null; // Safely handling image URL
+    this.image = user.image ? `${user.image}` : null; // Safely handling image URL
     this.type = user.type
       ? user.type.charAt(0).toUpperCase() + user.type.slice(1)
       : null; // Safely handling user type
