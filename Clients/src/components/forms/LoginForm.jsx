@@ -12,6 +12,7 @@ const LoginForm = () => {
     email: "",
     password: "",
   });
+  const [showPassword, setShowPassword] = useState(false);
 
   // Handle input changes
   const inputEvent = (e) => {
@@ -53,6 +54,11 @@ const LoginForm = () => {
     }
   };
 
+  // Toggle password visibility
+  const togglePasswordVisibility = () => {
+    setShowPassword((prev) => !prev);
+  };
+
   return (
     <>
       <div className="navbarlogo">
@@ -88,18 +94,25 @@ const LoginForm = () => {
                   autoFocus
                 />
               </div>
-              <div className="form-group">
+              <div className="form-group password-group">
                 <label htmlFor="password">Password</label>
                 <input
-                  placeholder="Enter a password "
                   id="password"
+                  placeholder="Enter a password"
                   onChange={inputEvent}
                   value={formData.password}
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   className="form-control"
                   name="password"
                   required
                 />
+                <button
+                  type="button"
+                  className="show-password-btn"
+                  onClick={togglePasswordVisibility}
+                >
+                  {showPassword ? "Hide" : "Show"}
+                </button>
               </div>
               <button type="submit" className="btn btn-primary btn-block">
                 Login

@@ -42,6 +42,22 @@
   object-fit: cover;
   margin: 10px 0;
 }
+.password-group {
+  position: relative;
+  border-style: none;
+}
+
+.show-password-btn {
+  border-style: none;
+  position: absolute;
+  right: 10px;
+  top: 70%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #007bff;
+}
 
 .login-card {
   margin-top: 20px;
