@@ -66,9 +66,9 @@ const LoginForm = () => {
         <div className="login-left">
           <div className="login-brand">
             <img
-              src="https://www.paisa4you.com/Images/png%20logo.png"
+              src="https://res.cloudinary.com/dzmu2pbjn/image/upload/v1729143479/fk99xtxngnikhnbs0dcc.png"
               alt="Company Logo"
-              width="200"
+              width="120"
             />
           </div>
           <div className="login-card">
