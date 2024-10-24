@@ -53,7 +53,6 @@ const AttendanceView = () => {
     let empObj = {};
     const fetchData = async () => {
       const res = await getAttendance(obj);
-
       const { data } = res;
       console.log(data);
       setAttendance(data);
@@ -95,6 +94,14 @@ const AttendanceView = () => {
     const { data } = res;
     setAttendance(data);
   };
+
+  // Sort the attendance records by date
+  const sortedAttendance = attendance?.sort((a, b) => {
+    const dateA = new Date(a.year, a.month - 1, a.date); // month is 0-indexed
+    const dateB = new Date(b.year, b.month - 1, b.date);
+    return dateA - dateB; // Sort in ascending order
+  });
+
   return (
     <>
       {attendance ? (
@@ -186,14 +193,14 @@ const AttendanceView = () => {
                 </tr>
               </thead>
               <tbody>
-                {attendance?.map((attendance, idx) => (
-                  <tr>
+                {sortedAttendance?.map((attendance, idx) => (
+                  <tr key={attendance._id}>
                     <td>{idx + 1}</td>
                     <td>
-                      {employeeMap && employeeMap[attendance.employeeID][0]}
+                      {employeeMap && employeeMap[attendance.employeeID]?.[0]}
                     </td>
                     <td>
-                      {employeeMap && employeeMap[attendance.employeeID][1]}
+                      {employeeMap && employeeMap[attendance.employeeID]?.[1]}
                     </td>
                     <td>
                       {attendance.date +
@@ -203,7 +210,7 @@ const AttendanceView = () => {
                         attendance.year}
                     </td>
                     <td>{attendance.day}</td>
-                    <td>{attendance.present === true ? "Present" : ""}</td>
+                    <td>{attendance.status}</td>
                   </tr>
                 ))}
               </tbody>

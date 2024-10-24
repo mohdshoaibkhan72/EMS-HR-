@@ -79,28 +79,48 @@ const Salary = () => {
   return (
     <>
       {salary ? (
-        <div className="main-content">
+        <div
+          className="main-content"
+          style={{ backgroundColor: "#121212", color: "#E0E0E0" }}
+        >
           <section className="section">
-            <div className="card">
-              <div className="card-header d-flex justify-content-between">
+            <div className="card" style={{ backgroundColor: "#1E1E1E" }}>
+              <div
+                className="card-header d-flex justify-content-between"
+                style={{ backgroundColor: "#1F3A6D", color: "#E0E0E0" }}
+              >
                 <h4>Salary for {currentMonth}</h4>
               </div>
             </div>
 
-            <div className={`card ${salary ? "" : "d-none"}`}>
+            <div
+              className={`card ${salary ? "" : "d-none"}`}
+              style={{ backgroundColor: "#1E1E1E" }}
+            >
               <div className="card-body row">
                 <div className="col-md-3">
                   <img
                     className="img-fluid img-thumbnail"
                     src={user.image}
                     alt="Employee"
+                    style={{ borderRadius: "10px", borderColor: "#4CAF50" }}
                   />
                 </div>
                 <div className="col-md-9">
-                  <table className="table table-bordered">
+                  <table
+                    className="table table-bordered"
+                    style={{ color: "#E0E0E0" }}
+                  >
                     <thead>
                       <tr>
-                        <th colSpan="2" className="text-center">
+                        <th
+                          colSpan="2"
+                          className="text-center"
+                          style={{
+                            backgroundColor: "#1F3A6D",
+                            color: "#E0E0E0",
+                          }}
+                        >
                           Employee Details
                         </th>
                       </tr>
@@ -110,10 +130,9 @@ const Salary = () => {
                         <th>Name</th>
                         <td>{user.name}</td>
                       </tr>
-
                       <tr>
                         <th>Monthly Salary</th>
-                        <td>Rs. {salary?.salary}</td>
+                        <td className="text-success">Rs. {salary?.salary}</td>
                       </tr>
                     </tbody>
                   </table>
@@ -121,15 +140,73 @@ const Salary = () => {
               </div>
             </div>
 
-            <div className="card">
-              <div className="card-header">
-                <h4>Attendance Counts</h4>
+            {/* Attendance and Salary Card */}
+            <div className="card mt-4" style={{ backgroundColor: "#1E1E1E" }}>
+              <div
+                className="card-header"
+                style={{ backgroundColor: "#1F3A6D", color: "#E0E0E0" }}
+              >
+                <h4>Attendance Details and Calculated Salary</h4>
               </div>
               <div className="card-body">
-                <h5>Total Present: {attendanceCounts.present}</h5>
-                <h5>Total Absent: {attendanceCounts.absent}</h5>
-                <h5>Total Half Day: {attendanceCounts.halfDay}</h5>
-                <h5>Calculated Salary: Rs. {calculatedSalary}</h5>
+                <div className="row">
+                  {/* Attendance Details */}
+                  <div className="col-md-6">
+                    <h5 className="text-info">Attendance Counts</h5>
+                    <table
+                      className="table table-bordered"
+                      style={{ color: "#E0E0E0" }}
+                    >
+                      <tbody>
+                        <tr>
+                          <th className="bg-success text-white">
+                            Total Present
+                          </th>
+                          <td className="text-success">
+                            {attendanceCounts.present}
+                          </td>
+                        </tr>
+                        <tr>
+                          <th className="bg-danger text-white">Total Absent</th>
+                          <td className="text-danger">
+                            {attendanceCounts.absent}
+                          </td>
+                        </tr>
+                        <tr>
+                          <th className="bg-warning text-dark">
+                            Total Half Day
+                          </th>
+                          <td className="text-warning">
+                            {attendanceCounts.halfDay}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  {/* Salary Details */}
+                  <div className="col-md-6">
+                    <h5 className="text-info">Salary Breakdown</h5>
+                    <table
+                      className="table table-bordered"
+                      style={{ color: "#E0E0E0" }}
+                    >
+                      <tbody>
+                        <tr>
+                          <th className="bg-info text-white">Monthly Salary</th>
+                          <td className="text-success">Rs. {salary?.salary}</td>
+                        </tr>
+                        <tr>
+                          <th className="bg-info text-white">
+                            Calculated Salary
+                          </th>
+                          <td className="text-success">
+                            Rs. {calculatedSalary}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
               </div>
             </div>
           </section>

@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { markEmployeeAttendance, getEmployees } from "../../http"; // Import the getEmployees function
+import { markEmployeeAttendance, getEmployees } from "../../http";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Loading from "../Loading";
-import "./MarkAttendance.css"; // Import the CSS file
+import "./MarkAttendance.css";
 
 const MarkAttendance = () => {
   const { user } = useSelector((state) => state.authSlice);
-  const [employees, setEmployees] = useState([]); // State for storing employees
-  const [loading, setLoading] = useState(true); // State for loading
-  const [attendanceLoading, setAttendanceLoading] = useState(null); // State for individual attendance loading
-  const [attendanceData, setAttendanceData] = useState({}); // State for storing attendance input
+  const [employees, setEmployees] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [attendanceLoading, setAttendanceLoading] = useState(null);
+  const [attendanceData, setAttendanceData] = useState({});
 
   useEffect(() => {
     const fetchEmployees = async () => {
@@ -55,23 +55,19 @@ const MarkAttendance = () => {
       return;
     }
 
-    setAttendanceLoading(employeeID); // Set loading for specific employee
+    setAttendanceLoading(employeeID);
     try {
       const res = await markEmployeeAttendance({
         employeeID,
         attendanceDate,
         status,
       });
-      console.log("Attendance mark response:", res); // Log the response
+      console.log("Attendance mark response:", res);
       const { success, message } = res;
 
-      if (success) {
-        toast.success(message);
-      } else {
-        toast.error("Failed to mark attendance. Please try again. ", error);
-      }
+      success ? toast.success(message) : toast.error(message);
     } catch (error) {
-      console.error("Error marking attendance:", error); // Log the error
+      console.error("Error marking attendance:", error);
       toast.error("An error occurred while marking attendance.");
     } finally {
       setAttendanceLoading(null);
@@ -104,7 +100,6 @@ const MarkAttendance = () => {
                     <div key={employee._id} className="attendance-item mb-3">
                       <span className="employee-name">{employee.name}</span>
 
-                      {/* Date input for selecting the attendance date */}
                       <input
                         type="date"
                         name="attendanceDate"
@@ -113,15 +108,16 @@ const MarkAttendance = () => {
                         }
                         onChange={(e) => handleChange(e, employee.id)}
                         className="form-control my-2 attendance-date"
-                        max={new Date().toISOString().split("T")[0]} // Prevent future dates
+                        max={new Date().toISOString().split("T")[0]}
+                        aria-label={`Attendance date for ${employee.name}`}
                       />
 
-                      {/* Dropdown to select attendance status */}
                       <select
                         name="status"
                         value={attendanceData[employee.id]?.status || ""}
                         onChange={(e) => handleChange(e, employee.id)}
                         className="form-control my-2 attendance-status"
+                        aria-label={`Attendance status for ${employee.name}`}
                       >
                         <option value="">Select Status</option>
                         <option value="Present">Present</option>
