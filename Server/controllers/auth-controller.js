@@ -16,17 +16,20 @@ class AuthController {
       return next(ErrorHandler.badRequest("Email and password are required"));
 
     let data;
-    if (validator.isEmail(email)) {
-      data = { email }; // Search by email
+    const normalizedEmail = email.toLowerCase(); // Normalize email to lowercase
+
+    // Check if the input is a valid email
+    if (validator.isEmail(normalizedEmail)) {
+      data = { email: normalizedEmail }; // Search by email
     } else {
-      data = { username: email }; // Search by username if input is not a valid email
+      data = { username: normalizedEmail }; // Search by username if input is not a valid email
     }
 
     const user = await userService.findUser(data);
 
     // If no user is found, return error
     if (!user) {
-      return next(ErrorHandler.badRequest("Invalid Email or Username"));
+      return next(ErrorHandler.badRequest("User Not found "));
     }
 
     // Check account status
@@ -81,7 +84,7 @@ class AuthController {
     });
 
     console.log("access tokens: ", accessToken);
-    console.log("refres tokens: ", refreshToken);
+    console.log("refresh tokens: ", refreshToken);
   };
 
   forgot = async (req, res, next) => {
