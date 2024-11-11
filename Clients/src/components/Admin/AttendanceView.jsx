@@ -11,7 +11,7 @@ const AttendanceView = () => {
   const [employees, setEmployees] = useState();
   const [selectedEmployee, setSelectedEmployee] = useState();
 
-  const years = [2020, 2021, 2022, 2023, 2024]; // Customize this as needed
+  const years = [2024]; // Customize this as needed
   const months = [
     "January",
     "February",

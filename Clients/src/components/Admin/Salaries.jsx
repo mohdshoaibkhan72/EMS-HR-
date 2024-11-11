@@ -93,7 +93,6 @@ const Salaries = () => {
                   <th>Name</th>
                   <th>Email</th>
                   <th>Salary</th>
-                  <th>Bonus</th>
                 </tr>
               </thead>
               <tbody className="sidebar-wrapper">
@@ -107,7 +106,6 @@ const Salaries = () => {
                     <td>{employeeMap[salary.employeeID]?.[0]}</td>
                     <td>{employeeMap[salary.employeeID]?.[1]}</td>
                     <td>{salary.salary}</td>
-                    <td>{salary.bonus}</td>
                   </tr>
                 ))}
               </tbody>

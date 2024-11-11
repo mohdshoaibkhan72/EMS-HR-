@@ -42,6 +42,7 @@
   align-items: center;
 }
 
+/* Sidebar Menu Item */
 .sidebar-menu a {
   display: flex;
   align-items: center;
@@ -62,7 +63,7 @@
   padding-left: 25px; /* Indent when hovering */
 }
 
-/* Active Link Style (Updated) */
+/* Active Link Style */
 .sidebar-menu a.active {
   background-color: transparent; /* Keep the background transparent */
   color: #2575fc; /* Blue color for active link */
@@ -85,7 +86,7 @@
 
 /* Collapsed Sidebar Icon */
 .main-sidebar.collapsed .sidebar-menu i {
-  font-size: 1rem; /* Larger icon when sidebar is collapsed */
+  font-size: 1.5rem; /* Larger icon when sidebar is collapsed */
   margin-right: 0; /* Remove margin for better centering */
 }
 
@@ -113,6 +114,22 @@
   border-radius: 5px;
   margin-left: 10px;
   transition: opacity 0.3s ease;
+}
+
+/* Dropdown Submenu */
+.submenu {
+  list-style: none;
+  padding-left: 20px;
+  margin: 0;
+  max-height: 0; /* Initially collapse the submenu */
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease, opacity 0.5s ease;
+}
+
+.submenu.show {
+  max-height: 500px; /* Ensure this is enough to accommodate your content */
+  opacity: 1;
 }
 
 /* Sidebar Button */
