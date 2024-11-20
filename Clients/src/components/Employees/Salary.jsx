@@ -14,6 +14,7 @@ const Salary = () => {
   });
   const [calculatedSalary, setCalculatedSalary] = useState(0);
   const [currentMonth, setCurrentMonth] = useState("");
+  const [loading, setLoading] = useState(true); // Added loading state
 
   useEffect(() => {
     const obj = {
@@ -21,36 +22,44 @@ const Salary = () => {
     };
 
     const fetchSalary = async () => {
-      const res = await viewEmployeeSalary(obj);
-      const { success, data } = res;
-      if (data.length > 0) {
-        setSalary(data[0]);
-      } else {
-        toast.error(user.name + "'s" + " " + "Salary not found");
+      try {
+        const res = await viewEmployeeSalary(obj);
+        const { success, data } = res;
+        if (data.length > 0) {
+          setSalary(data[0]);
+        } else {
+          toast.error(`${user.name}'s salary not found`);
+        }
+      } catch (error) {
+        toast.error("Error fetching salary data");
       }
     };
 
     const fetchAttendance = async () => {
-      const res = await viewEmployeeAttendance(obj);
-      const { success, data } = res;
-      if (success && data.length > 0) {
-        const presentCount = data.filter(
-          (record) => record.status === "Present"
-        ).length;
-        const absentCount = data.filter(
-          (record) => record.status === "Absent"
-        ).length;
-        const halfDayCount = data.filter(
-          (record) => record.status === "Half Day"
-        ).length;
+      try {
+        const res = await viewEmployeeAttendance(obj);
+        const { success, data } = res;
+        if (success && data.length > 0) {
+          const presentCount = data.filter(
+            (record) => record.status === "Present"
+          ).length;
+          const absentCount = data.filter(
+            (record) => record.status === "Absent"
+          ).length;
+          const halfDayCount = data.filter(
+            (record) => record.status === "Half Day"
+          ).length;
 
-        setAttendanceCounts({
-          present: presentCount,
-          absent: absentCount,
-          halfDay: halfDayCount,
-        });
-      } else {
-        toast.error("No attendance records found.");
+          setAttendanceCounts({
+            present: presentCount,
+            absent: absentCount,
+            halfDay: halfDayCount,
+          });
+        } else {
+          toast.error("No attendance records found.");
+        }
+      } catch (error) {
+        toast.error("Error fetching attendance data");
       }
     };
 
@@ -59,6 +68,8 @@ const Salary = () => {
 
     const monthName = new Date().toLocaleString("default", { month: "long" });
     setCurrentMonth(monthName);
+
+    setLoading(false); // Set loading state to false after data fetching
   }, [user.id]);
 
   useEffect(() => {
@@ -78,7 +89,9 @@ const Salary = () => {
 
   return (
     <>
-      {salary ? (
+      {loading ? (
+        <Loading />
+      ) : (
         <div
           className="main-content"
           style={{ backgroundColor: "#121212", color: "#E0E0E0" }}
@@ -103,7 +116,10 @@ const Salary = () => {
                     className="img-fluid img-thumbnail"
                     src={user.image}
                     alt="Employee"
-                    style={{ borderRadius: "10px", borderColor: "#4CAF50" }}
+                    style={{
+                      borderRadius: "10px",
+                      borderColor: "#4CAF50",
+                    }}
                   />
                 </div>
                 <div className="col-md-9">
@@ -211,8 +227,6 @@ const Salary = () => {
             </div>
           </section>
         </div>
-      ) : (
-        <Loading />
       )}
     </>
   );

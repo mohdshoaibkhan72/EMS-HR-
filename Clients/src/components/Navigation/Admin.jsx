@@ -97,7 +97,11 @@ const Admin = () => {
             <i className="fas fa-home"></i> <span>Dashboard</span>
           </NavLink>
         </li>
-
+        <li>
+          <NavLink className="nav-link" to="/company">
+            <i class="fa-regular fa-building"></i> <span>Company </span>
+          </NavLink>
+        </li>
         {/* Employees Section */}
         <li>
           <div

@@ -1,0 +1,27 @@
+.company-details {
+  margin-left: 300px;
+  margin-top: 00px;
+}
+
+.company-description,
+.company-services,
+.company-location,
+.company-contact {
+  margin-bottom: 20px;
+}
+
+.company-description h2,
+.company-services h2,
+.company-location h2,
+.company-contact h2 {
+  margin-bottom: 10px;
+}
+
+.company-services ul {
+  list-style-type: disc;
+  padding-left: 20px;
+}
+
+.company-contact p {
+  margin: 5px 0;
+}

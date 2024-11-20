@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css"; // Import default calendar styling
+import "react-calendar/dist/Calendar.css";
 import { viewEmployeeAttendance } from "../../http";
 import { useSelector } from "react-redux";
 import Loading from "../Loading";
@@ -10,52 +10,99 @@ const AttendanceCalendar = () => {
   const [attendance, setAttendance] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [error, setError] = useState(null);
+  const [isCurrentMonth, setIsCurrentMonth] = useState(true);
+  const [previousMonthAttendance, setPreviousMonthAttendance] = useState([]);
+  const [currentMonthName, setCurrentMonthName] = useState("");
+  const [previousMonthName, setPreviousMonthName] = useState("");
 
-  useEffect(() => {
-    const fetchAttendance = async () => {
-      try {
-        const dt = new Date();
-        const obj = {
-          employeeID: user.id,
-          year: dt.getFullYear(),
-          month: dt.getMonth() + 1,
-        };
-        const res = await viewEmployeeAttendance(obj);
-        if (res.success) {
+  const fetchAttendance = async (month, year) => {
+    try {
+      const obj = {
+        employeeID: user.id,
+        year: year,
+        month: month,
+      };
+      const res = await viewEmployeeAttendance(obj);
+      if (res.success) {
+        if (month === new Date().getMonth() + 1) {
           setAttendance(res.data);
         } else {
-          setError("No attendance data found");
+          setPreviousMonthAttendance(res.data);
         }
-      } catch (error) {
-        setError("Failed to fetch attendance data");
+      } else {
+        if (month === new Date().getMonth() + 1) {
+          setAttendance([]);
+          setError("No attendance data found");
+        } else {
+          setPreviousMonthAttendance([]);
+        }
       }
-    };
-    fetchAttendance();
+    } catch (error) {
+      setError("Failed to fetch attendance data");
+    }
+  };
+
+  useEffect(() => {
+    const dt = new Date();
+    setCurrentMonthName(dt.toLocaleString("default", { month: "long" })); // Get the name of the current month
+    const previousMonthDate = new Date(dt.getFullYear(), dt.getMonth() - 1, 1);
+    setPreviousMonthName(
+      previousMonthDate.toLocaleString("default", { month: "long" })
+    ); // Get the name of the previous month
+    fetchAttendance(dt.getMonth() + 1, dt.getFullYear()); // Fetch current month's data
   }, [user.id]);
 
-  const getAttendanceStatus = (date) => {
-    if (attendance.length === 0) return null;
+  const toggleMonth = () => {
+    const dt = new Date();
+    if (isCurrentMonth) {
+      const previousMonthDate = new Date(
+        dt.getFullYear(),
+        dt.getMonth() - 1,
+        1
+      );
+      setSelectedDate(previousMonthDate); // Set the date to previous month
+      fetchAttendance(
+        previousMonthDate.getMonth() + 1,
+        previousMonthDate.getFullYear()
+      );
+    } else {
+      const currentMonthDate = new Date();
+      setSelectedDate(currentMonthDate); // Set the date back to current month
+      fetchAttendance(
+        currentMonthDate.getMonth() + 1,
+        currentMonthDate.getFullYear()
+      );
+    }
+    setIsCurrentMonth(!isCurrentMonth);
+  };
 
+  const getAttendanceStatus = (date) => {
     const day = date.getDate();
     const month = date.getMonth() + 1;
     const year = date.getFullYear();
 
-    const record = attendance.find(
-      (entry) =>
-        entry.date === day && entry.month === month && entry.year === year
-    );
+    const record =
+      attendance.find(
+        (entry) =>
+          entry.date === day && entry.month === month && entry.year === year
+      ) ||
+      previousMonthAttendance.find(
+        (entry) =>
+          entry.date === day && entry.month === month && entry.year === year
+      ) ||
+      {};
 
     return record ? record.status : "";
   };
 
-  const calculateTotals = () => {
+  const calculateTotals = (attendanceData) => {
     const totals = {
       Present: 0,
       "Half Day": 0,
       Absent: 0,
     };
 
-    attendance.forEach((entry) => {
+    attendanceData.forEach((entry) => {
       if (entry.status in totals) {
         totals[entry.status] += 1;
       }
@@ -64,245 +111,219 @@ const AttendanceCalendar = () => {
     return totals;
   };
 
-  const totals = calculateTotals();
+  const totals = calculateTotals(attendance);
+  const prevMonthTotals = calculateTotals(previousMonthAttendance);
 
   return (
     <div className="main-content">
       <style>
         {`
-    /* Main Content Styling */
     .main-content {
       height: 100vh;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
       align-items: center;
-      background-color: #121212; /* Dark background for main content */
-      font-family: "Arial", sans-serif; /* Set a clean font */
-      color: #e0e0e0; /* Light gray text for better readability */
+      background-color: #121212;
+      font-family: "Arial", sans-serif;
+      color: #e0e0e0;
     }
 
-    /* Error Message Styling */
     .error-message {
-      color: #ff6f61; /* Bright red for error messages */
+      color: #ff6f61;
       text-align: center;
       margin: 20px;
-      font-size: 1.2em; /* Larger text for emphasis */
+      font-size: 1.2em;
     }
 
-    /* Calendar Container */
     .calendar-container {
       margin: 20px auto;
       max-width: 1200px;
-      width: 90%; /* Responsive width */
+      width: 90%;
     }
 
-    /* Summary Box Styling */
     .summary-box {
-      border: 1px solid #444; /* Dark border for summary box */
+      border: 1px solid #444;
       border-radius: 10px;
       padding: 20px;
       margin-bottom: 20px;
-      box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1); /* Light shadow for summary box */
+      box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
       text-align: center;
-      background-color: #1e1e1e; /* Dark background for summary box */
+      background-color: #1e1e1e;
     }
 
-    /* Summary Items Layout */
     .summary-items {
       display: flex;
       justify-content: space-around;
-      margin-top: 10px; /* Added margin for spacing */
+      margin-top: 10px;
     }
 
-    /* Summary Item Styling */
     .summary-item {
       text-align: center;
-      flex: 1; /* Equal spacing for items */
-      padding: 10px; /* Padding for touch targets */
+      flex: 1;
+      padding: 10px;
     }
 
     .summary-item p {
-      margin: 0; /* Remove default margin */
-      font-size: 1.1em; /* Increase font size for better readability */
+      margin: 0;
+      font-size: 1.1em;
     }
 
-    /* Status Colors */
     .summary-item.present p {
-      color: #4caf50; /* Green for present */
+      color: #4caf50;
       font-weight: bold;
     }
 
     .summary-item.half-day p {
-      color: #ffc107; /* Amber for half-day */
+      color: #ffc107;
       font-weight: bold;
     }
 
     .summary-item.absent p {
-      color: #f44336; /* Red for absent */
+      color: #f44336;
       font-weight: bold;
     }
 
-    /* Custom Calendar Styling */
     .custom-calendar {
       width: 100%;
       height: 500px;
-      border-radius: 10px; /* Rounded corners for calendar */
-      box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2); /* Light shadow for calendar */
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
     }
 
-    /* React Calendar Base */
     .react-calendar {
-      background-color: #1e1e1e; /* Dark background for calendar */
-      border: none; /* No border for the calendar */
+      background-color: #1e1e1e;
+      border: none;
     }
 
-    /* Month View Padding */
     .react-calendar__month-view {
       padding: 10px;
     }
 
-    /* Month Name Styling */
     .react-calendar__navigation__label {
-      color: #ffffff; /* Set month name to white*/
-      font-weight: bold; /* Make it bold for emphasis */
+      color: #ffffff;
+      font-weight: bold;
     }
 
-    /* Month Navigation Button Styling */
     .react-calendar__navigation button {
-      color: #ffffff; /* White color for navigation buttons */
-      background: transparent; /* Transparent background */
-      border: none; /* No border */
-      cursor: pointer; /* Pointer cursor on hover */
-      transition: color 0.3s ease; /* Smooth color transition */
+      color: #ffffff;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      transition: color 0.3s ease;
     }
 
     .react-calendar__navigation button:hover {
-      color: #ff6f61; /* Change color on hover */
+      color: #ff6f61;
     }
 
-    /* Calendar Tile Styling */
     .react-calendar__tile {
-      padding: 15px; /* More padding for the calendar tiles */
-      border-radius: 8px; /* Rounded corners for tiles */
-      transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition for hover effect */
-      box-shadow: 0 2px 5px rgba(255, 255, 255, 0.1); /* Light shadow for tiles */
-      color: #ffffff; /* White text for calendar tiles */
-      font-size: 1em; /* Standardize font size */
+      padding: 15px;
+      border-radius: 8px;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      box-shadow: 0 2px 5px rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+      font-size: 1em;
     }
 
-    /* Active Tile Highlighting */
     .react-calendar__tile--active {
-      background-color: #42a5f5; /* Highlight active tile */
-      color: white; /* White text for active tile */
+      background-color: #42a5f5;
+      color: white;
     }
 
-    /* Today's Date Highlighting */
     .react-calendar__tile--now {
-      background-color: #00695c; /* Dark teal for today's date */
-      color: white; /* Ensure text is visible */
+      background-color: #00695c;
+      color: white;
     }
 
-    /* Hover Effect for Calendar Tiles */
     .react-calendar__tile:hover {
-      background-color: #ffffff; /* White background on hover */
-      color: #121212; /* Dark text for visibility on hover */
+      background-color: #ffffff;
+      color: #121212;
     }
 
-    /* Disabled Tiles */
     .react-calendar__tile--disabled {
-      color: #bdbdbd; /* Grey for disabled tiles */
+      color: #bdbdbd;
     }
 
-    /* Additional Classes for Status */
     .present {
-      color: #4caf50; /* Green for present */
+      color: #4caf50;
     }
 
     .half-day {
-      color: #ffc107; /* Amber for half-day */
+      color: #ffc107;
     }
 
     .absent {
-      color: #f44336; /* Red for absent */
+      color: #f44336;
     }
 
-    /* Button Styling */
-    .button {
-      background-color: #42a5f5; /* Button color */
-      color: white; /* Button text color */
-      border: none; /* No border */
-      padding: 10px 20px; /* Padding for the button */
-      border-radius: 5px; /* Rounded corners for the button */
-      cursor: pointer; /* Pointer cursor on hover */
-      margin-top: 20px; /* Space above the button */
-      transition: background-color 0.3s; /* Transition for hover effect */
-    }
-
-    .button:hover {
-      background-color: #00796b;
-    }
-
-    /* Responsive Adjustments */
-    @media (max-width: 768px) {
-      .summary-items {
-        flex-direction: column; /* Stack items on smaller screens */
-      }
-
-      .summary-item {
-        margin: 10px 0; /* Add margin between stacked items */
-      }
+    .react-calendar__tile--active {
+      background-color: #ff6f61;
     }
   `}
       </style>
-
       {error && <div className="error-message">{error}</div>}
-      {attendance.length > 0 ? (
-        <div className="calendar-container">
+      {attendance.length === 0 && previousMonthAttendance.length === 0 ? (
+        <Loading />
+      ) : (
+        <>
           <div className="summary-box">
-            <h3>Monthly Attendance Summary</h3>
+            <p>
+              <strong>Attendance Summary</strong>
+            </p>
             <div className="summary-items">
               <div className="summary-item present">
-                <p>Present: {totals.Present}</p>
+                <p>
+                  {isCurrentMonth
+                    ? "Present"
+                    : `Prev. Month - ${previousMonthName}`}{" "}
+                  : {isCurrentMonth ? totals.Present : prevMonthTotals.Present}
+                </p>
               </div>
               <div className="summary-item half-day">
-                <p>Half Day: {totals["Half Day"]}</p>
+                <p>
+                  {isCurrentMonth
+                    ? "Half Day"
+                    : `Prev. Month - ${previousMonthName}`}{" "}
+                  :{" "}
+                  {isCurrentMonth
+                    ? totals["Half Day"]
+                    : prevMonthTotals["Half Day"]}
+                </p>
               </div>
               <div className="summary-item absent">
-                <p>Absent: {totals.Absent}</p>
+                <p>
+                  {isCurrentMonth
+                    ? "Absent"
+                    : `Prev. Month - ${previousMonthName}`}{" "}
+                  : {isCurrentMonth ? totals.Absent : prevMonthTotals.Absent}
+                </p>
               </div>
             </div>
           </div>
-          <Calendar
-            value={selectedDate}
-            onChange={setSelectedDate}
-            className="custom-calendar"
-            tileContent={({ date, view }) => {
-              if (view === "month") {
-                const status = getAttendanceStatus(date);
-                return (
-                  <div className="calendar-tile">
-                    <p
-                      className={
-                        status === "Present"
-                          ? "present"
-                          : status === "Half Day"
-                          ? "half-day"
-                          : status === "Absent"
-                          ? "absent"
-                          : ""
-                      }
-                    >
-                      {status}
-                    </p>
-                  </div>
-                );
-              }
-            }}
-          />
-        </div>
-      ) : (
-        <Loading />
+          <div className="calendar-container">
+            <button onClick={toggleMonth}>
+              {isCurrentMonth
+                ? `Current Month - ${currentMonthName}`
+                : `Previous Month - ${previousMonthName}`}
+            </button>
+            <Calendar
+              onChange={setSelectedDate}
+              value={selectedDate}
+              locale="en-IN"
+              className="custom-calendar"
+              tileContent={({ date, view }) => {
+                if (view === "month") {
+                  const status = getAttendanceStatus(date);
+                  if (status) {
+                    return <div className={status.toLowerCase()}>{status}</div>;
+                  }
+                }
+                return null;
+              }}
+            />
+          </div>
+        </>
       )}
     </div>
   );

@@ -44,6 +44,7 @@ import AssignSalary from "./components/Admin/AssignSalary";
 import Salaries from "./components/Admin/Salaries";
 import SalaryView from "./components/Admin/Salary";
 import MarkAttendance from "./components/Admin/markAttendace";
+import Company from "./components/Company/Company";
 
 // import './assets/css/asdfasdf';
 // import './assets/css/asdfasdf';
@@ -105,6 +106,9 @@ const App = () => {
       </AdminRoute>
       <AdminRoute exact path="/adduser">
         <AddUser />
+      </AdminRoute>
+      <AdminRoute exact path="/company">
+        <Company />
       </AdminRoute>
       <AdminRoute exact path="/attendance">
         <AttendanceView />
