@@ -104,7 +104,13 @@ const AttendanceView = () => {
 
   return (
     <>
-      {attendance ? (
+      {attendance === undefined ? (
+        <Loading />
+      ) : attendance.length === 0 ? (
+        <div className="text-center">
+          <h4>No attendance found</h4>
+        </div>
+      ) : (
         <div className="main-content">
           <section className="section">
             <div className="card">
@@ -217,8 +223,6 @@ const AttendanceView = () => {
             </table>
           </div>
         </div>
-      ) : (
-        <Loading />
       )}
     </>
   );
